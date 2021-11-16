@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Tiktok Livesale Edav Project"
+author: "Jessie Wang, Jingyuan Chen, Megan Zhou"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
