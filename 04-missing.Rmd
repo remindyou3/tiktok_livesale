@@ -1,1 +1,4 @@
 # Missing values
+
+We found there are very interesting patterns in the missing values of "Data_Livestream_General_processed.xlsx". Here is the image we get for all of the missing patterns:
+![Missing Pattern in our file](missing pattern.png)
