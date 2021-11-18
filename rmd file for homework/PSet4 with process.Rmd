@@ -1,0 +1,334 @@
+---
+title: "PSet 4"
+output:
+  html_document: default
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+# this prevents package loading message from appearing in the rendered version of your problem set
+knitr::opts_chunk$set(warning = FALSE, message = FALSE,
+                      echo = TRUE)
+#install.packages('patchwork')
+```
+
+Note: Grading is based both on your graphs and verbal explanations. Follow all best practices *as discussed in class*, including choosing appropriate parameters for all graphs. *Do not expect the assignment questions to spell out precisely how the graphs should be drawn. Sometimes guidance will be provided, but the absense of guidance does not mean that all choices are ok.*
+
+IMPORTANT: THIS TEMPLATE DOES NOT INCLUDE THE SAMPLE GRAPHS THAT APPEAR IN THE .HTML VERSION OF THE ASSIGNMENT SO BE SURE TO VIEW THAT FILE AS WELL.
+
+### 1. `mycars` missing patterns
+
+Create a missing values plot for the `mycars` dataset created below (slightly different from the one in the lecture slides). Your plot should be in the style of `extracat::visna()` (no longer available on CRAN) using **ggplot2** to create the main plot and two side plots and **patchwork** to put them together. It should show accurately: missing patterns,  counts for missing by column and missing by pattern, and make it clear which row respresents complete cases. Bars in the side plots should be sorted and correspond to the rows and columns of the main plot. An example is provided though the aesthetics of your plot do not have to conform precisely to the example. Some code is provided to get you started with finding missing patterns. (Keep in mind that in the next question you will be turning this code into a function so to save yourself time later on write as generically as possible.)
+
+```{r}
+library(tidyverse)
+library(patchwork)
+
+# Add NAs to mtcars dataset
+set.seed(5702)
+mycars <- mtcars
+mycars[1:25, "gear"] <- NA
+mycars[10:20, 3:5] <- NA
+for (i in 1:10) mycars[sample(32,1), sample(11,1)] <- NA
+```
+
+**Hints:**
+
+* You can use this code to find and count the missing patterns:
+```{r}
+missing_patterns <- data.frame(is.na(mycars)) %>%
+  group_by_all() %>%
+  count(name = "count", sort = TRUE) %>%
+  ungroup() 
+```
+
+
+```{r}
+#identify complete case
+missing_patterns2 <- missing_patterns %>% 
+    mutate(complete = ifelse(rowSums(.[1:ncol(missing_patterns)-1]) == 0, TRUE, FALSE))
+
+missing_patterns3 <- missing_patterns2 %>% 
+    rownames_to_column("missing_pattern")
+  
+missing_patterns3$missing_pattern <- as_factor(missing_patterns3$missing_pattern)
+
+tidyna <- missing_patterns3 %>% 
+    gather(key, value, -missing_pattern, -count, -complete) %>% 
+    mutate(missing = ifelse(value == TRUE, count, 0)) 
+
+#identify positions for complete case
+comp <- tidyna %>% filter(complete == TRUE) %>% select(missing_pattern) %>% distinct() %>% simplify()
+xpos <- levels(fct_reorder(tidyna$key, -tidyna$missing, sum))[(ncol(missing_patterns)-2)/2]
+
+#main plot
+g1 <- ggplot(tidyna, aes(x = fct_reorder(key, -missing, sum), y = fct_rev(missing_pattern), 
+                   fill = value, alpha = complete)) +
+  geom_tile(color = "white") + 
+  #scale_fill_viridis_d() + 
+  scale_fill_manual(values = c("grey", "purple")) +
+  scale_alpha_manual(values = c(0.5, 1), limits = c(FALSE,TRUE)) +
+  annotate("text", x = xpos, y = comp, label = "complete cases") +
+  xlab("variable") +
+  ylab("missing pattern") +
+  theme_classic() +
+  theme(legend.position="none")
+
+# missing by pattern
+ g2 <- ggplot(missing_patterns3, aes(y = fct_rev(missing_pattern), x = count, alpha = complete)) +
+  geom_col(fill = 'blue') +
+  #scale_fill_manual(values = c("blue",'lightblue'), limits = c(FALSE,TRUE)) +
+  scale_alpha_manual(values = c(0.5,1), limits = c(FALSE,TRUE)) +
+  xlab("row count") +
+  ylab(NULL) +
+  theme_bw() +
+  theme(legend.position="none")
+ 
+# missing by vairable
+ g3 <- tidyna %>%
+  group_by(key) %>%
+  summarize(Freq = sum(missing)) %>%
+  ggplot(aes(x=fct_reorder(key, -Freq), Freq)) +
+  geom_col(fill = "blue") +
+  xlab(NULL) +
+  ylab("num rows missing:") +
+  theme_bw()
+
+# assemble plots
+patchwork <- g3 + plot_spacer() + g1 + g2 + 
+  plot_layout(widths = c(3, 1), heights = c(1, 3))
+
+patchwork + plot_annotation(
+  title = 'Missing Value Patterns'
+)
+```
+
+```{r}
+missing <- data.frame(is.na(mycars)) %>%
+  group_by_all() %>%
+  count(name = "count", sort = TRUE) %>%
+  ungroup() %>%
+  mutate(precent = count / sum(count))
+
+missing2 <- missing %>%
+  mutate(count = count / sum(count)) 
+```
+
+
+
+* To highlight the complete cases row you need a different fill scale than the one used to show missing vs. non-missing in the main plot (purple and grey in the example). This is a little tricky since you're only allowed one fill scale in **ggplot2**. You can either use `alpha` to control the highlight with `scale_alpha_manual(values = ...)` or use the **ggnewscale** package which provides for multiple fill scales in the same graph.
+
+
+### 2. Missing value plot function
+
+a) Create a function for creating missing plots based on your code from question 1. It should provide an option to show either missing counts or missing percent. The percent option for `mycars` is shown below.
+
+You either put the function code in a separate `.R` file or include it in the `.Rmd` file.
+```{r}
+
+napattern <- function(data, percent = TRUE) {
+  #find missing patterns
+  missing_patterns <- data.frame(is.na(data)) %>%
+  group_by_all() %>%
+  count(name = "count", sort = TRUE) %>%
+  ungroup() 
+  
+  if (percent == TRUE) { 
+    missing_patterns <- missing_patterns %>%
+      mutate(count = (count / sum(count)) *100) 
+  }
+  
+  missing_patterns2 <- missing_patterns %>% 
+    mutate(complete = ifelse(rowSums(.[1:ncol(missing_patterns)-1]) == 0, TRUE, FALSE))
+
+  missing_patterns3 <- missing_patterns2 %>% 
+    rownames_to_column("missing_pattern")
+  
+  missing_patterns3$missing_pattern <- as_factor(missing_patterns3$missing_pattern)
+
+
+  tidyna <- missing_patterns3 %>% 
+    gather(key, value, -missing_pattern, -count, -complete) %>% 
+    mutate(missing = ifelse(value == TRUE, count, 0)) 
+
+  #identify positions for complete case
+  comp <- tidyna %>% filter(complete == TRUE) %>% select(missing_pattern) %>% distinct() %>%simplify()
+  xpos <- levels(fct_reorder(tidyna$key, -tidyna$missing, sum))[(ncol(missing_patterns) - 2) / 2]
+  
+  #main plot
+  g1 <- ggplot(tidyna, aes(x = fct_reorder(key, -missing, sum), y = fct_rev(missing_pattern), 
+                   fill = value, alpha = complete)) +
+  geom_tile(color = "white") + 
+  scale_fill_manual(values = c("grey", "purple")) +
+  scale_alpha_manual(values = c(0.5, 1), limits = c(FALSE,TRUE)) +
+  scale_x_discrete(labels = abbreviate) + 
+  annotate("text", x = xpos, y = comp, label = "complete cases") +
+  xlab("variable") +
+  ylab("missing pattern") +
+  theme_classic() +
+  theme(legend.position="none")
+  
+  # missing by pattern
+  if (percent == TRUE) { 
+    g2 <- ggplot(missing_patterns3, aes(y = fct_rev(missing_pattern), x = count, alpha = complete)) +
+      geom_col(fill = 'blue') +
+      scale_alpha_manual(values = c(0.5,1), limits = c(FALSE,TRUE)) +
+      xlab("% rows") +
+      ylab(NULL) +
+      theme_bw() +
+      theme(legend.position="none")
+    } else {
+    g2 <- ggplot(missing_patterns3, aes(y = fct_rev(missing_pattern), x = count, alpha = complete)) +
+      geom_col(fill = 'blue') +
+      scale_alpha_manual(values = c(0.5,1), limits = c(FALSE,TRUE)) +
+      xlab("row count") +
+      ylab(NULL) +
+      theme_bw() +
+      theme(legend.position="none")
+    }
+  
+  # missing by vairable
+  if (percent == TRUE) { 
+    g3 <- tidyna %>%
+      group_by(key) %>%
+      summarize(Freq = sum(missing)) %>%
+      ggplot(aes(x=fct_reorder(key, -Freq), Freq)) +
+      geom_col(fill = "blue") +
+      scale_x_discrete(labels = abbreviate) +
+      xlab(NULL) +
+      ylab("% rows missing:") +
+      theme_bw()
+    } else {
+    g3 <- tidyna %>%
+      group_by(key) %>%
+      summarize(Freq = sum(missing)) %>%
+      ggplot(aes(x=fct_reorder(key, -Freq), Freq)) +
+      geom_col(fill = "blue") +
+      scale_x_discrete(labels = abbreviate) + 
+      xlab(NULL) +
+      ylab("num rows missing:") +
+      theme_bw()
+    }
+
+# assemble plots
+  patchwork <- g3 + plot_spacer() + g1 + g2 + 
+  plot_layout(widths = c(3, 1), heights = c(1, 3))
+
+  patchwork 
+}
+```
+
+```{r}
+napattern(mycars, percent = TRUE)
+napattern(mycars, percent = FALSE)
+```
+
+  
+
+b) Show the output for both options (counts / percent) for the `economics` dataset in the **ggplot2** package. (This is a test to see if your function works if there are no missing values.)
+
+```{r}
+
+napattern(economics, percent = TRUE)
+napattern(economics, percent = FALSE)
+
+```
+
+
+c) Show the output for both options (counts / percent) for the `HollywoodMovies2011` dataset in the **Lock5withR** package. You can shorten the column names so they don't overlap in the plot.
+
+```{r}
+library(Lock5withR)
+names(HollywoodMovies2011) <- abbreviate(names(HollywoodMovies2011), minlength=2)
+napattern(HollywoodMovies2011, percent = TRUE)
+napattern(HollywoodMovies2011, percent = FALSE)
+```
+
+### 3. Setup your GitHub final project repo
+
+a) Set up your final project repository following the [EDAVproject template](https://github.com/jtr13/EDAVtemplate). You can either choose one team member's GitHub account, or create an organization to house the final project. *Be sure to follow all of the steps in the README so your bookdown book renders with your information, not the placeholders in the template.* Edit the link below to point to your rendered book:
+
+https://meganzhou62.github.io/tiktok_livesale/
+
+b) Make sure that all team members have write access to the repository and have practiced making contributions. Edit the link below to point to your contributors page, showing that all team members have made contributions to the repo (Note that we do not have the ability to see who has write access, only who has contributed):
+
+https://github.com/meganzhou62/tiktok_livesale/graphs/contributors
+
+c) Discuss a plan for dividing up the work for the final project and briefly summarize what each person will do.
+
+### 4. Missing values chapter
+
+Write a first draft of the missing values chapter of your final project. You do not have to include all of the data you use in the final project. Choose one file and analyze it using techniques discussed in class for missing values. Include a plot using your function from Q2 as well as verbal interpretation of the plot. Edit this link to point to your chapter:
+
+https://meganzhou62.github.io/tiktok_livesale/missing-values.html
+```{r}
+library("readxl")
+my_data <- read_excel("Data_Livestream_General_processed.xlsx")
+
+
+my_data
+napattern(my_data)
+```
+```{r}
+
+my_data$nug = is.na(my_data$gd)
+my_data$nuct = is.na(my_data$CT)
+my_data
+ggplot(my_data, aes(Se)) +
+geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+facet_wrap(~ nug) 
+#xlim(0, 1600)+ 
+#ylim(0,8) +
+ggplot(my_data, aes(Se)) +
+geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+facet_wrap(~ nuct)
+#ggplot(my_data, aes(Se)) +
+#geom_histogram(bins = 30, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+#facet_wrap(~ nu)
+```
+```{r}
+ggplot(my_data, aes(Ho)) +
+geom_histogram(stat="count",
+               colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+facet_wrap(~ nuct)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(my_data, aes(Ho)) +
+geom_histogram(stat="count",
+               colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+facet_wrap(~ nug)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+```{r}
+my_data
+x= seq(1,length(my_data$Se))
+
+ggplot(my_data) +
+geom_point(aes(x=x,y=my_data$Se)) + 
+facet_wrap(~ nuct)
+```
+
+
+```{r}
+my_data$re <- as.numeric(my_data$re)
+ggplot(my_data, aes(re)) +
+geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F') + 
+facet_wrap(~ nug)
+```
+
+```{r}
+my_data[complete.cases(my_data),]
+my_data
+```
+
+
+
+
+**If your data for the final project has no missing values, you may use one of the following datasets instead for this question. You can include your answer here since it doesn't belong in your final project.**
+
+**fivethirtyeight** package: `avengers`, `bachelorette`, `dem_candidates`, `steak_survey`, `trumpworld_polls`
+
+**openintro** package: `birds`, `ucla_textbooks_f18` 
