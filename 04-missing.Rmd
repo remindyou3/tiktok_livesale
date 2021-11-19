@@ -19,4 +19,4 @@ Here we found that the data with CT, CVT, gd, pr and re missing usually come wit
 Similar cases exist when we explore the rows with LS (average length of stay of viewers) missing. 
 ![LS Missing Pattern with respect to duration](missing pattern with duration ls missing.png)
 
-We should also note that these null values would shall not be an obstacle to our project as these values are here because they hosts are not selling items. Our plan for now would be to delete these rows because they are not related to our questions asked. 
+We should also note that these null values shall not be an obstacle to our project as these values are here because they hosts are not selling items. Our plan for now would be to delete these rows because they are not related to our questions asked. 
