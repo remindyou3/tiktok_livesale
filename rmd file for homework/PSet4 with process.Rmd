@@ -264,7 +264,7 @@ Write a first draft of the missing values chapter of your final project. You do 
 https://meganzhou62.github.io/tiktok_livesale/missing-values.html
 ```{r}
 library("readxl")
-my_data <- read_excel("Data_Livestream_General_processed.xlsx")
+my_data <- read_excel("../assignmentand data/Data_Livestream_General_processed.xlsx")
 
 
 my_data
@@ -274,7 +274,8 @@ napattern(my_data)
 
 my_data$nug = is.na(my_data$gd)
 my_data$nuct = is.na(my_data$CT)
-my_data
+my_data$nuls = is.na(my_data$LS)
+
 ggplot(my_data, aes(Se)) +
 geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
 facet_wrap(~ nug) 
@@ -286,14 +287,20 @@ facet_wrap(~ nuct)
 #ggplot(my_data, aes(Se)) +
 #geom_histogram(bins = 30, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
 #facet_wrap(~ nu)
+
+ggplot(my_data, aes(Se)) +
+geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+facet_wrap(~ nuls) 
+#xlim(0, 1600)+ 
+#ylim(0,8) +
 ```
 ```{r}
-ggplot(my_data, aes(Ho)) +
+ggplot(my_data, aes(fct_infreq(Ho))) +
 geom_histogram(stat="count",
                colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
 facet_wrap(~ nuct)+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-ggplot(my_data, aes(Ho)) +
+ggplot(my_data, aes(fct_infreq(Ho))) +
 geom_histogram(stat="count",
                colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
 facet_wrap(~ nug)+
