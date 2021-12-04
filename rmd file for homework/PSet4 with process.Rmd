@@ -278,11 +278,11 @@ my_data$nuls = is.na(my_data$LS)
 
 ggplot(my_data, aes(Se)) +
 geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
-facet_wrap(~ nug) 
-#xlim(0, 1600)+ 
+facet_wrap(~ nug) +
+xlab("duration of live stream (sec)") 
 #ylim(0,8) +
 ggplot(my_data, aes(Se)) +
-geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
+geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + xlab("duration of live stream (sec)") +
 facet_wrap(~ nuct)
 #ggplot(my_data, aes(Se)) +
 #geom_histogram(bins = 30, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
@@ -290,8 +290,8 @@ facet_wrap(~ nuct)
 
 ggplot(my_data, aes(Se)) +
 geom_histogram(bins = 60, colour = "#80593D", fill = '#9FC29F', boundary = 0) + 
-facet_wrap(~ nuls) 
-#xlim(0, 1600)+ 
+facet_wrap(~ nuls) +
+xlab("duration of live stream (sec)") 
 #ylim(0,8) +
 ```
 ```{r}
