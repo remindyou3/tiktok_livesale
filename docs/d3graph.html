@@ -1,0 +1,280 @@
+<head>
+        <meta charset="utf-8">
+        <title></title>
+        <script src="https://d3js.org/d3.v6.js"></script>
+        <style type ="text/css">
+
+  .line1 {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2.0px;
+      }
+	  
+	  .line18 {
+        fill: none;
+        stroke: green;
+        stroke-width: 2.0px;
+      }
+	  
+	  .line19 {
+        fill: none;
+        stroke: blue;
+        stroke-width: 2.0px;
+      }
+	  .line20 {
+        fill: none;
+        stroke: red;
+        stroke-width: 2.0px;
+      }
+	  
+	  
+	  #format1{
+			  font-size:20px;
+			  font-family:Palatino;}
+			  
+	  #format2{
+			  font-size:15px;
+			  font-family:Palatino;}
+        </style>
+		
+		
+      
+    </head>
+    
+    <body><h3>
+      Revenue and number of goods sold from June 2021 to August 2021
+    </h3>
+    <h4>By host:</h4>
+    <input
+        type="radio"
+        onclick="update(dataLuoYonghao)"
+        name="typeofaction"
+        value="dataLuoYonghao"
+      />Luo Yonghao
+    <input
+        type="radio"
+        onclick="update(dataLiuYuanyuan)"
+        name="typeofaction"
+        value="dataLiuYuanyuan"
+      />Liu Yuanyuan
+    <input
+        type="radio"
+        onclick="update(dataAresCheng)"
+        name="typeofaction"
+        value="dataAresCheng"
+      />Ares Cheng
+    <input
+        type="radio"
+        onclick="update(dataJiaNailiang)"
+        name="typeofaction"
+        value="dataJiaNailiang"
+      />Jia Nailiang
+    <input
+        type="radio"
+        onclick="update(dataQiWei)"
+        name="typeofaction"
+        value="dataQiWei"
+      />Qi Wei
+    <input
+        type="radio"
+        onclick="update(dataZhuZixiao)"
+        name="typeofaction"
+        value="dataZhuZixiao"
+      />Zhu Zixiao
+<input
+        type="radio"
+        onclick="update(dataZiAn)"
+        name="typeofaction"
+        value="dataZiAn"
+      />Zi An
+<input
+        type="radio"
+        onclick="update(dataShuChang)"
+        name="typeofaction"
+        value="dataShuChang"
+      />Shu Chang
+<input
+        type="radio"
+        onclick="update(dataLovemimius)"
+        name="typeofaction"
+        value="dataLovemimius"
+      />Lovemimius
+<input
+        type="radio"
+        onclick="update(dataLouYixiao)"
+        name="typeofaction"
+        value="dataLouYixiao"
+      />Lou Yixiao
+<input
+        type="radio"
+        onclick="update(dataQiuYingying)"
+        name="typeofaction"
+        value="dataQiuYingying"
+      />Qiu Yingying
+<input
+        type="radio"
+        onclick="update(dataChenSanfeiGG)"
+        name="typeofaction"
+        value="dataChenSanfeiGG"
+      />Chen SanfeiGG
+<input
+        type="radio"
+        onclick="update(dataLiuFangPostureCorrector)"
+        name="typeofaction"
+        value="dataLiuFangPostureCorrector"
+      />Liu Fang Posture Corrector
+<input
+        type="radio"
+        onclick="update(dataRainbowCouple)"
+        name="typeofaction"
+        value="dataRainbowCouple"
+      />Rainbow Couple
+<input
+        type="radio"
+        onclick="update(dataBeibeiTu)"
+        name="typeofaction"
+        value="dataBeibeiTu"
+      />Beibei Tu
+<input
+        type="radio"
+        onclick="update(dataCaoYing)"
+        name="typeofaction"
+        value="dataCaoYing"
+      />Cao Ying
+<input
+        type="radio"
+        onclick="update(dataWangZulan)"
+        name="typeofaction"
+        value="dataWangZulan"
+      />Wang Zulan
+<input
+        type="radio"
+        onclick="update(dataTuLei)"
+        name="typeofaction"
+        value="dataTuLei"
+      />Tu Lei
+<input
+        type="radio"
+        onclick="update(dataZhangTing)"
+        name="typeofaction"
+        value="dataZhangTing"
+      />Zhang Ting
+<input
+        type="radio"
+        onclick="update(dataMr.DongJewelry)"
+        name="typeofaction"
+        value="DongJewelry"
+      />Mr.Dong Jewelry
+</p>
+    <div></div>
+    <svg width="800" height="500" id="svg3">
+	<text id="format1" x="200" y="80">Total Bike Trips 2018-2020</text>
+	</svg>
+	
+	  <svg width="800" height="500" id="svg4">
+	
+	
+
+	  </svg>
+	
+    
+	
+	  <svg width="800" height="50" id="svg6">
+	 </svg>
+	
+    <svg width="1000" height="800" id="svg5">
+	
+	<rect id="data_19" x="50" y="40" width="100" height="40" fill="steelblue"></rect>
+	<rect id="data_20" x="200" y="40"  width="100" height="40" fill="pink"></rect>
+	
+	</svg>
+	
+    
+    <script>
+      
+	  var svg3 = d3.select("#svg3")
+      var margin3 = {top: 100, right: 50, bottom: 30, left: 60}
+      var width3 =  +svg3.attr("width") - margin3.left - margin3.right
+      var height3 = +svg3.attr("height") - margin3.top - margin3.bottom
+      var g3 = svg3.append("g").attr("transform", `translate(${margin3.left}, ${margin3.top})`);
+      var parseTime = d3.timeParse("%b-%y");
+      var xScale3 = d3.scaleTime().range([0, width3]);
+      var yScale3 = d3.scaleLinear()
+        .domain([70000, 3000000])
+        .range([height3, 0]);
+      var line3 = d3.line()
+        .x(d => xScale3(d.date))
+        .y(d => yScale3(d.high));
+      var data3 = 
+     [{"date":"Jun-01","high":42009.32279},
+{"date":"Jun-06","high":57165.9166299999},
+{"date":"Jun-11","high":108726.95631},
+{"date":"Jun-13","high":126826.15405},
+{"date":"Jun-15","high":141890.02926},
+{"date":"Jun-17","high":154585.45926},
+{"date":"Jun-18","high":192744.00129},
+{"date":"Jun-27","high":308905.381289999},
+{"date":"Jul-06","high":324396.910409999},
+{"date":"Jul-15","high":331591.36984},
+{"date":"Jul-18","high":354278.515099999},
+{"date":"Jul-23","high":379494.694599999},
+{"date":"Jul-25","high":385095.820749999},
+{"date":"Jul-31","high":392333.401649999},
+{"date":"Aug-03","high":402729.364069999},
+{"date":"Aug-05","high":423795.626479999},
+{"date":"Aug-08","high":472386.793559999},
+{"date":"Aug-09","high":472386.793559999},
+{"date":"Aug-11","high":477535.625139999},
+{"date":"Aug-12","high":502652.771839999},
+{"date":"Aug-14","high":530402.881809999},
+{"date":"Aug-16","high":535811.986019999},
+{"date":"Aug-17","high":543914.819469999},
+{"date":"Aug-18","high":582520.727569999},
+{"date":"Aug-21","high":597775.728079999},
+{"date":"Aug-23","high":613028.031089999},
+{"date":"Aug-25","high":697556.855109999},
+{"date":"Aug-28","high":699978.82206}];
+      
+      
+		
+      data3.forEach(function(d) {
+            d.date = parseTime(d.date);
+      });
+     
+      xScale3
+        .domain(d3.extent(data3, d => d.date));
+        
+      g3.append("g")
+          .attr("transform", `translate(0, ${height3})`)
+          .call(d3.axisBottom(xScale3).ticks(18));
+      g3.append("g")
+          .call(d3.axisLeft(yScale3));
+      g3.append("path")
+          .datum(data3)
+          .attr("class", "line1")
+          .attr("fill", "none")
+          .attr("d", line3);
+		  
+	  let totalLength1 = svg3.select('.line1').node().getTotalLength();
+
+	  svg3.select('.line1')
+		.attr("stroke-dasharray", totalLength1 + " " + totalLength1)
+		.attr("stroke-dashoffset", totalLength1)
+		.transition() // Call Transition Method
+		.duration(2000) // Set Duration timing (ms)
+		.ease(d3.easeLinear) // Set Easing option
+		.attr("stroke-dashoffset", 0); 
+		
+
+
+
+
+        
+      
+
+				
+    </script>
+    
+    </body>
+
+</html>
