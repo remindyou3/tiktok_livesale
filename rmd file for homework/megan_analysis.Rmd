@@ -1,0 +1,355 @@
+---
+title: "Result"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+As we previously found that that consumers came to KOL because they have expertise in a specific category and came to celebrities because of their reputation. We now have data on the number of likes, comments, and repost these 20 hosts' videos received. We're interested in exploring whether the revenue these hosts generated from live stream are related to the data of their videos updated in the same time frame (from 2021/06 to 2021/08). If there's some relationship, is it the same case for both KOL and celebrities or is it different? We'll show our answer to this question by the following exploration. 
+
+```{r cars}
+library("readxl")
+general_data <- read_excel("../assignmentand data/Data_Livestream_General_processed.xlsx")
+
+general_data_ <- read_excel("../assignmentand data/Data_Livestream_General.xlsx")
+
+general_data <- read.csv(file = '../assignmentand data/Data_Livestream_General_processed.csv')
+
+sum(general_data$re, na.rm = TRUE)
+general_data_
+general_data_$Total_sales_amount <- as.numeric(general_data_$Total_sales_amount)
+
+sum(general_data_$Total_sales_amount, na.rm = TRUE)
+```
+
+```{r}
+library(stringr)
+library(openintro)
+library(tidyverse)
+library(tidyr)
+library(plyr)
+general_data$date <- str_sub(general_data$Start_time, 1, 5)
+general_data$re <- as.numeric(general_data$Total_sales_amount)
+
+general_data_aggbydate <-  ddply(general_data, .(Name, date
+), summarize,  dayrevenue=sum(re))
+general_data_aggbydate
+```
+
+
+```{r}
+general_data_aggbydate
+general_data_positive_re <- general_data_aggbydate[general_data_aggbydate$dayrevenue >0 ,]
+general_data_positive_re
+general_data_positive_re <- na.omit(general_data_positive_re) 
+general_data_positive_re
+p <- ggplot(data = general_data_positive_re, aes(x = dayrevenue)) + geom_histogram(bins=50)
+
+p + facet_wrap(~Ho)
+```
+
+
+
+```{r}
+
+
+p <- ggplot(data = general_data_positive_re, aes(x = dayrevenue)) + geom_histogram()
+p + facet_wrap(~Ho)
+
+```
+```{r}
+
+```
+
+
+```{r}
+
+
+ggplot(general_data_positive_re, aes(fct_reorder(Ho, dayrevenue), dayrevenue)) +
+  geom_boxplot()  + xlab('Ho') +coord_flip()
+```
+
+
+
+
+```{r}
+video_data <- read_excel("../assignmentand data/Data_Short_Videos.xlsx")
+video_data <- video_data[rowSums(is.na(video_data)) != ncol(video_data), ]
+
+video_data
+```
+```{r}
+pairs(video_data[,6:8])
+```
+
+```{r}
+ggplot(video_data, aes(fct_reorder(Name, Number_of_likes), Number_of_likes)) +
+  geom_boxplot()  + xlab('Name') +coord_flip()
+
+ggplot(video_data, aes(fct_reorder(Name, Number_of_comments), Number_of_comments)) +
+  geom_boxplot()  + xlab('Name') +coord_flip()
+
+ggplot(video_data, aes(fct_reorder(Name, Number_of_reposts), Number_of_reposts)) +
+  geom_boxplot()  + xlab('Name') +coord_flip()
+```
+
+
+
+
+```{r}
+
+average_data_per_hosts <- ddply(video_data, .(Name), summarize,  like=mean(Number_of_likes, na.rm = TRUE), comments=mean(Number_of_comments, na.rm = TRUE), repost = mean(Number_of_reposts))
+average_data_per_hosts
+```
+```{r}
+library(tidyr)
+library(plyr)
+
+general_data_without_nullandzero_re <-  ddply(general_data_positive_re, .(Ho, K), summarize,  dailyrevenue=mean(dayrevenue, na.rm = TRUE))
+general_data_without_nullandzero_re
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+mergedData <- merge(general_data_without_nullandzero_re, average_data_per_hosts, by.x=c('Ho'), by.y=c('Name'))
+
+```
+
+
+```{r}
+
+library(ggplot2)
+library(ggrepel)
+library(ggpubr)
+
+#my.formula <- y ~ x
+ggplot(data = mergedData, aes(x =like, y =  dailyrevenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),size = 2.5, hjust=1, vjust=0.5) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("like versus revenue")+
+  geom_smooth(method = "lm", se=FALSE)+
+facet_grid(~ K)
+
+
+ggplot(data = mergedData, aes(x =comments, y =  dailyrevenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("comments versus revenue")+
+  geom_smooth(method="lm", se= FALSE)+
+facet_grid(~ K)
+
+ggplot(data = mergedData, aes(x =repost, y =  dailyrevenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("repost versus revenue")+
+  geom_smooth(method="lm", se= FALSE)+
+facet_grid(~ K)
+  
+```
+
+
+
+
+
+```{r}
+general_data_nonull <- na.omit(general_data) 
+
+more_average_data_per_hosts <- ddply(general_data_nonull, .(Ho, K), summarize,  peak=mean(Pv, na.rm = TRUE), gifts=mean(G, na.rm = TRUE), revenue = mean(re), viewer=mean(V), average_viewers=mean(A, na.rm = TRUE), likes_stream=mean(Lk, na.rm = TRUE), nf_stream=mean(NF, na.rm = TRUE))
+more_average_data_per_hosts
+```
+```{r}
+more_mergedData <- merge(more_average_data_per_hosts, average_data_per_hosts, by.x=c('Ho'), by.y=c('Name'))
+more_mergedData
+```
+
+```{r}
+pairs(more_mergedData[,3:12])
+```
+looks like compared to revenue, peak and viewer are more related to variable like
+peak and viewer
+```{r}
+ggplot(data = more_mergedData, aes(x =like, y =  peak, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("like versus peak")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =comments, y =  peak, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("comments versus peak")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =repost, y =  peak, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("repost versus peak")+
+  geom_smooth(method="lm", se= FALSE)
+```
+```{r}
+ggplot(data = more_mergedData, aes(x =like, y =  viewer, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("viewer versus like")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =comments, y =  viewer, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("viewer versus comments")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =repost, y =  viewer, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("viewer versus repost")+
+  geom_smooth(method="lm", se= FALSE)
+```
+
+```{r}
+ggplot(data = more_mergedData, aes(x =like, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("revenue versus like")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =comments, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("revenue versus comments")+
+  geom_smooth(method="lm", se= FALSE)
+
+ggplot(data = more_mergedData, aes(x =repost, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("revenue versus repost")+
+  geom_smooth(method="lm", se= FALSE)
+```
+
+```{r}
+ggplot(data = general_data_nonull, aes(x =Pv, y =  re, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  #geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("peak versus re")+
+  geom_smooth(method="lm", se= FALSE)+
+  facet_wrap(~K)
+```
+
+```{r}
+ggplot(data = general_data_nonull, aes(x =V, y =  re, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  #geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("viewer versus re")+
+  geom_smooth(method="lm", se= FALSE)+
+  facet_wrap(~K)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+general_data_positive_re
+```
+```{r}
+library(stringr)
+general_data_positive_re$month <- str_sub(general_data_positive_re$St, 1, 4)
+general_data_positive_re
+
+video_data$month <- str_sub(video_data$Release_time, 1, 4)
+video_data
+```
+```{r}
+average_data_per_hosts_month <- ddply(video_data, .(Name, month), summarize,  like=mean(Number_of_likes, na.rm = TRUE), comments=mean(Number_of_comments, na.rm = TRUE), repost = mean(Number_of_reposts))
+average_data_per_hosts_month
+more_average_data_per_hosts_month <- ddply(general_data_positive_re, .(Ho, K, month), summarize,  peak=mean(Pv, na.rm = TRUE), gifts=mean(G, na.rm = TRUE), revenue = mean(re), viewer=mean(V), average_viewers=mean(A, na.rm = TRUE), likes_stream=mean(Lk, na.rm = TRUE), nf_stream=mean(NF, na.rm = TRUE), re_pertime = mean(re_per_duration))
+more_average_data_per_hosts_month
+more_mergedData_month <- merge(more_average_data_per_hosts_month, average_data_per_hosts_month, by.x=c('Ho', 'month'), by.y=c('Name', 'month'))
+more_mergedData_month
+```
+```{r}
+pairs(more_mergedData_month[,4:14])
+
+```
+```{r}
+ggplot(data = more_mergedData_month, aes(x =like, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  #geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("revenue versus like")+
+  geom_smooth(method="lm", se= FALSE)+
+  facet_wrap(~Ho)
+
+
+```
+```{r}
+
+ggplot(data = more_mergedData_month, aes(x =comments, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  #geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("comments versus like")+
+  geom_smooth(method="lm", se= FALSE)+
+  facet_wrap(~Ho)
+
+
+
+ggplot(data = more_mergedData_month, aes(x =repost, y =  revenue, color = K,label = Ho)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("revenue versus repost")+
+  geom_smooth(method="lm", se= FALSE)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
