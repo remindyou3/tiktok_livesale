@@ -24,7 +24,7 @@
 <meta name="author" content="Jessie Wang, Jingyuan Chen, Megan Zhou" />
 
 
-<meta name="date" content="2021-12-05" />
+<meta name="date" content="2021-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -80,6 +80,7 @@
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="8" data-path="interactive-component-tryout.html"><a href="interactive-component-tryout.html"><i class="fa fa-check"></i><b>8</b> Interactive component tryout</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -101,7 +102,9 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
-<p>After we gathered the data, we did some data transformation in Python so that we can work with it in R. The script in Python can be found in our github folder at <a href="https://github.com/meganzhou62/tiktok_livesale/blob/main/assignmentand%20data/data%20processing/transfer%20duration%20to%20seconds.ipynb" class="uri">https://github.com/meganzhou62/tiktok_livesale/blob/main/assignmentand%20data/data%20processing/transfer%20duration%20to%20seconds.ipynb</a>. This was necessary because we had time data in digit plus Chinese character format, and it is in different units including hour, minute and second. Thus, we match the Chinese character with different unit of time and convert all time variable into the number of seconds. We did the conversion to the duration of the live stream, the average duration per viewer in the Data_Livestream_general.xlsx and the video duration in Data_Short_Videos.xlsx.</p>
+<p>After we gathered the data, we started our data cleaning to make it more convenient for us to work with the data in R. The first thing we did is that we user Python to convert the time variable. The script in Python can be found in our github folder at <a href="https://github.com/meganzhou62/tiktok_livesale/blob/main/assignmentand%20data/data%20processing/transfer%20duration%20to%20seconds.ipynb" class="uri">https://github.com/meganzhou62/tiktok_livesale/blob/main/assignmentand%20data/data%20processing/transfer%20duration%20to%20seconds.ipynb</a>. This was necessary because we had time data in digit plus time unit in English format, and it is in different units including hour, minute and second. Thus, we matched the English character with different unit of time and converted all time variable into the number of seconds. We did the conversion to the duration of the live stream, the average duration per viewer in the Data_Livestream_general.xlsx and the video duration in Data_Short_Videos.xlsx.</p>
+<p>We also changed the Host_category variable from F/T to K/C, as in K standing for KOL and C standing for celebrities. This change could make our later visualization clearer. For the category of items, we had a look at the over twenties different categories and eventually combined them into nine general categories. To further organized our data, we removed the Chinese title of each session of live stream and assign an unique id to each session.</p>
+<p>Finally, we also did some final data transformation in R. This includes changing char variable to numeric, changing Name variable into factor and reordering the Name variable by the total revenue each host generated.</p>
 
 </div>
             </section>
