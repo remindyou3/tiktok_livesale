@@ -13,8 +13,9 @@ var options = {
                 title: "Date"     // X轴坐标名称
             },
             yAxis: {
+                ticks: 20,
                 name: "",     // Y轴坐标字段
-                title: "Count"     // Y轴坐标名称
+                title: "Revenue (Chinese Yuan)"     // Y轴坐标名称
             }
         };
         //-------------------------- 配置信息 end --------------------------

@@ -1,31 +1,28 @@
 var data = [
+  {"date":"2021-05-31T00:00:00.000Z",
+"LuoYonghao":0,
+"LiuYuanyuan":0,
+"AresCheng":0,
+"JiaNailiang":0,
+"QiWei":0,
+"ZhuZixiao":0,
+"ZiAn":0,
+"ShuChang":0,
+"Lovemimius":0,
+"LouYixiao":0,
+"QiuYingying":0,
+"ChenSanfeiGG":0,
+"LiuFangPostureCorrector":0,
+"RainbowCouple":0,
+"BeibeiTu":0,
+"CaoYing":0,
+"WangZulan":0,
+"TuLei":0,
+"ZhangTing":0,
+"Mr.DongJewelry":0
+},
   
-  {
-    "date": "2019-06-01T00:00:00.000Z",
-     "LuoYonghao":42009322.79, 
-     "LiuYuanyuan": 42009322.79,
-     "AresCheng":42009322.79 ,
-     "JiaNailiang":42009322.79, 
-     "QiWei":42009322.79,
-     "ZhuZixiao":42009322.79,
-     "ZiAn":42009322.79,
-     "ShuChang":42009322.79,
-     "Lovemimius":42009322.79,
-     "LouYixiao":42009322.79,
-     "QiuYingying":42009322.79,
-     "ChenSanfeiGG":42009322.79,
-     "LiuFangPostureCorrector":42009322.79,
-     "RainbowCouple":42009322.79,
-     "BeibeiTu":42009322.79,
-     "CaoYing":42009322.79,
-      "WangZulan":42009322.79,
-      "TuLei":42009322.79,
-      "ZhangTing":42009322.79,
-      "Mr.DongJewelry":42009322.79
-  }
-]
-
-var data = [{"date":"2021-06-01T00:00:00.000Z",
+  {"date":"2021-06-01T00:00:00.000Z",
 "LuoYonghao":5872577.48,
 "LiuYuanyuan":164830.79,
 "AresCheng":42009322.79,
@@ -2049,11 +2046,6 @@ var data = [{"date":"2021-06-01T00:00:00.000Z",
 "ZhangTing":331684932.44000006,
 "Mr.DongJewelry":950640240.95
 }
-
-  
-  
-  
-  
   
   
   ]
