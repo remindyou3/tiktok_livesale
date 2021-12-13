@@ -4,14 +4,10 @@
 
 <div id="main">
 <div style="text-align:center;">
-<h2>Revenue and number of goods sold from June 2021 to August 2021</h2>
+<h2>Revenue earned from different hosts from June 2021 to August 2021</h2>
 </div>
 <div id="filter-box" class="filter-box" style="text-align:center;">
-<select id="year-list">
-<option value="all">all</option>
-<option value="2019">2019</option>
-<option value="2020">2020</option>
-</select>
+
 <span class="legend LuoYonghao">LuoYonghao</span>
 <span class="legend LiuYuanyuan">LiuYuanyuan</span>
 <span class="legend AresCheng">AresCheng</span>
