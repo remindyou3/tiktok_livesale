@@ -4,3 +4,5 @@ After we gathered the data, we started our data cleaning to make it more conveni
 We also changed the Host_category variable from F/T to K/C, as in K standing for KOL and C standing for celebrities. This change could make our later visualization clearer. For the category of items, we had a look at the over twenties different categories and eventually combined them into nine general categories. To further organized our data, we removed the Chinese title of each session of live stream and assign an unique id to each session. 
 
 Finally, we also did some final data transformation in R. This includes changing char variable to numeric, changing Name variable into factor and reordering the Name variable by the total revenue each host generated. 
+
+Besides the transformation mentioned above, for our interative component, we also processed our data in Python (code at https://github.com/meganzhou62/tiktok_livesale/blob/main/processed%20data/Make%20cumulative%20data.ipynb). We grouped the revenue by each host and date, and got the cumulative sum by each host. We also printed it out in a specfic way so that it fits into the js data format. 
