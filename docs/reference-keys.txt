@@ -5,4 +5,4 @@ missing-values
 results
 interactive-component
 conclusion
-interactive-component-tryout
+tryout
