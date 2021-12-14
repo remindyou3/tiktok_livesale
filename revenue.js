@@ -14,7 +14,7 @@ var options = {
             },
             yAxis: {
                 name: "",     // Y轴坐标字段
-                title: "Revenue (Chinese Yuan)"     // Y轴坐标名称
+                title: "Revenue (Chinese Yuan in million)"     // Y轴坐标名称
             }
         };
         //-------------------------- 配置信息 end --------------------------
@@ -124,7 +124,10 @@ var options = {
             var maxDate = d3.max(sublist, function (d) { return d.date; });
             scale.domain([minDate, maxDate]);
             xAxis.scale(scale).tickFormat(function (d) {
-                return `${d.getFullYear()}-${d.getMonth() + 1}`;
+                return `${d.getMonth() + 1}-${d.getDate()}`;
+            });
+            yAxis.scale(scale).tickFormat(function (d) {
+                return `${d/1000000}`;
             });
             svg.select(".x.axis").call(xAxis);
 
@@ -172,7 +175,10 @@ var options = {
             var maxDate = d3.max(data, function (d) { return d.date; });
             scale.domain([minDate, maxDate]);
             xAxis.scale(scale).tickFormat(function (d) {
-                return `${d.getFullYear()}-${d.getMonth() + 1}`;
+                return `${d.getMonth() + 1}-${d.getDate()}`;
+            });
+            yAxis.scale(scale).tickFormat(function (d) {
+                return `${d/1000000}`;
             });
             svg.select(".x.axis").call(xAxis);
 
