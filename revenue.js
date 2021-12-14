@@ -116,11 +116,7 @@ var options = {
                 d.show = !d.show;
                 update();
             });
-        d3.select("#year-list")
-            .on("change", function () {
-                currentYear = this.value;
-                update();
-            })
+
         function update() {
             var sublist = currentYear === "all"
                 ? datalist : datalist.filter(e => e.date.getFullYear() === currentYear * 1);

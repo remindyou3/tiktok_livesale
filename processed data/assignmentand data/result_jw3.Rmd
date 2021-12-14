@@ -1,0 +1,196 @@
+---
+title: "results"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+```
+
+### KOL vs Celebrities
+
+From 2021/06 to 2021/08, among top20 hosts, KOL generated more revenue than celebrities.
+Do celebrities have an advantage over KOLs (key opinion leader)? In particular, what’s the revenue comparison between the two groups? 
+We have a hypothesis that people come to celebrities’ live streaming rooms because they like the person and come to KOLs’ live streaming rooms because KOLs offer a higher discount or have expertise in the specific area. 
+We will focus on the top 20 hosts’ sales data in the past quarter to answer the questions. We will first define people to be celebrities if they are famous actors/actresses/singers based on our common judgments. Then we will look at their sales data and test our hypothesis.
+look at sales in different cateogry
+
+```{r}
+livestream <- read_csv("../processed data/Data_Livestream_General_processed.csv")
+livestream
+
+#change date
+livestream$Date <- as.Date(livestream$Date,format='%m/%d/%y')
+livestream$Host_category<-as.factor(livestream$Host_category)
+
+
+#group revenue by day, host
+total_by_day<-livestream %>% group_by(Name, Host_category, Date) %>%
+  dplyr::summarize(Sales_amount_total = sum(Total_sales_amount,na.rm=TRUE),n=n()) %>%
+  ungroup()
+
+average<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_avg = mean(Sales_amount_total,na.rm=TRUE))  
+  
+total<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_total = sum(Sales_amount_total,na.rm=TRUE),n=n()) %>%
+  left_join(average, by=c("Name", "Host_category"))
+```
+
+```{r}
+#sales distribution: KOLs host more streaming than c; KOLs sell more than c
+ggplot(total_by_day, aes(Sales_amount_total)) +
+geom_histogram()+ 
+facet_wrap(~Host_category)+
+xlab("Sale Revenue per Day")
+scale_x_continuous(labels = scales::comma)
+```
+
+This graph gives an overview of the sale revenue distribution per day. We can see from the graph that daily revenue distribution is right skewed for both celebrities and KOLs. Most daily sales from June 2021 to August 2021 were less than 20 million Chinese Yuan (~3.2m US dollars). Both celebrities and KOLs had generated sales that were more than 50m yuan with celebrities having more positive outliers than KOLs.
+
+We can also see from the graph that KOLs held more livestream than celebrities within the three month. When exploring the data, we found that some host held more than 1 livestream per day. With further investigation, we found there were three scenarios: 1) Some hosts experienced technical issues so they had to end current session and start another session; 2) Some hosts ended the session for lunch/dinner break and restart a new one; 3) Some hosts first started a session without selling goods and then switched to a new session to sell. Therefore, we decided to group sessions that happened in the same day together and track daily performance. The following graph shows number of days they host a livestream from June to August. 
+
+```{r}
+#total number of days steaming: KOLs host more streaming than c
+ggplot(total_by_day, aes(fct_infreq(Name), fill=Host_category)) +
+geom_bar()+
+xlab("Host Name")+
+ylab("Number of Days with Livestream")+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+From the graph, we see that Liu Fang, Luo yonghao, and Liuyuanyuan almost held sessions every day.It is clear that KOLs are broadcasting more frequently than celebrities, which is reasonable since most KOLs were broadcasting for their own products (ex. Liu Fang and Liu Yuanyuan) and other KOLs usually signed contracts with companies and thus had a minimal number of days they need to broadcast. Celebrities, on the other hand, had other jobs to do so they didn't broadcasting as frequently. Luo Yonghao is an outlier in the celebrities group: he was first known by the public as an entrepreneur and actor but now he changed his focus to livestream sales. 
+
+Now, let's look at the relationship between days of livestream and revenue. 
+
+```{r}
+#total sales vs days of streaming: KOLs generate more revenue, Luo is an outlier
+ggplot(total, aes(n, Sales_amount_total, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Total Sales in 3 Month")
+```
+
+The graph shows KOLs generated more revenues than celebrities overall. Again, Luo Yonghao is an outlier among these top 20 hosts with much more revenue generated. Actually, he is the most successful host in Douyin. Now, let's explore the revenue difference between the two groups further and look at the average revenue per day. 
+
+```{r}
+#avg sales vs days of streaming
+ggplot(total, aes(n, Sales_amount_avg, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Daily Average Sales")
+```
+
+Here, we found another outlier Jia Nailiang, who has very large daily sales and only held a couple sessions. After some research, we found that he just started livesteam sales in mid-Aug and only had two days of broadcasting. Usually, when a celebrity just started to sell goods, he/she would get very good discounts from the business so the price were really attractive to consumers. Fans would also buy a lot to support them. Therefore, for our analysis, we will view Jia Nailiang as an outlier and we will keep track of his future performance and see if his data regression to the mean.  
+
+```{r}
+#after removing Jia: in general, celebrities hold less streaming and have more avg
+total%>%filter(Name!='Jia Nailiang') %>%
+ggplot(aes(n, Sales_amount_avg, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Daily Average Sales")
+```
+
+After removing Jia Nailiang, it's easier to see most celebrities held less than 20 session in the 3 months but they were able to generate more daily revenues. Qi Wei,Lou Yixiao, Zhang Ting, and Zhu Zixiao are famous actresses and they had decent average sales. Another interesting insights we got from the graph is that KOLs were clustered as two groups: a group with large number of livestreams but lower average sales and the other group with fewer livestreams but more average sales. Just looking from the host name, we think it's probably a result of product mix. For example, Mr.Dong Jewely had most average sale among the 19 hosts; from his name, he was probably selling mostly jewely whose unit price is high and consumers don't buy that frequently. 
+
+We will look more into the product mix in the next section.
+
+
+```{r}
+#by categories
+sales <-read_csv("../processed data/Data_Sales_processed2.csv")
+sales
+sum(is.na(sales))
+
+#factor relevel
+sales$Name<-as.factor(sales$Name)
+name_order<-fct_reorder(total$Name,-total$Sales_amount_total)%>%levels()
+sales$Name<-fct_relevel(sales$Name,name_order)
+levels(sales$Name)
+
+
+sales$Good_category_new<-as.factor(sales$Good_category_new)
+sales_total<-sales %>% group_by(Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+good_order<-fct_reorder(sales_total$Good_category_new, -sales_total$Sales_amount_total)%>%levels()
+sales$Good_category_new<-fct_relevel(sales$Good_category_new,good_order)
+levels(sales$Good_category_new)
+
+#aggregate ccategory total
+sales2<-sales %>% group_by(Name,Host_category, Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+
+
+```
+
+```{r}
+#revenue by host, good category, not clear info
+ggplot(sales2, aes(Good_category_new, Sales_amount_total,fill = Host_category)) + 
+  geom_col() + 
+  facet_wrap(~Name, nrow=4)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  theme(legend.position = "top")+
+  xlab("Goods Category")+
+  ylab("Total Sales")
+
+sales2%>%
+ggplot(aes( Good_category_new, Sales_amount_total, fill= Host_category)) +
+geom_col(position = "dodge")+
+scale_y_continuous(labels = scales::comma)+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+xlab("Goods Category")+
+ylab("Total Sales")
+```
+
+The above graph gives an overview of the product mix for each host among 7 main categories ordered by total revenue. It can be seen that celebrities sold products across most categories and almost all of they sold most in beauty (again, Luo Yonghao is an outlier). KOLs, on the other hand, generated most revenue from 1-3 categories that they had a close relationship with. Let's zoom in and look at each group with details. 
+
+
+```{r}
+#K is generally good at 1 or 2 categories according to their expertise. 
+sales2%>%
+filter(Host_category=='K')%>%
+  ggplot(aes(Good_category_new, Sales_amount_total)) + 
+  geom_col(fill = 'red') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  xlab("Goods Category")+
+  ylab("Total Sales")
+```
+
+From the graph, we can see Mr.Dong made most money from selling jewelries because he owned the jewerly shop. Zi An, Qiu Yingying and Lovemimius all made most sales in clothing and they also had their own online stores selling clothes. For four of them, they mainly promoted their own products. And viewers in their room should have the expectation about what they were watching and potentially buying Or in the other words, people who came to their rooms should already have a potential interest in the goods. Other KOLs are selling multiple categories of goods and a majority of them did become famous because of short videos and in that sense, they are more like online-celebrities. 
+
+```{r}
+#beauty is the most popular category in celebrities. Other categories is pretty even 
+sales2%>%
+filter(Host_category=='C')%>%
+  ggplot(aes(Good_category_new,Sales_amount_total)) + 
+  geom_col(fill = 'blue') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  xlab("Goods Category")+
+  ylab("Total Sales")
+```
+
+The product mix for celebrities are quite different. Besides Luo Yonghao, most celebrities sold all kinds of good with a higher percentage in beauty. This is not hard to understand after thinking through it. E-commerce is not the major income source for celebrities and they don't usually sign an exclusive agreement with any companies. Therefore, we usually sold whatever goods found by their assistance either with high commission or high discount (so they would attract more people and increase their population). The fact that celebrities didn't specialize in one category attracts = people with different interests and again diversified what they sell. Another interesting fact is that the most popular category among celebrities is beauty. We think it is due to two reasons. Firstly, beauty is the most popular e-commerce categories overall. Unlike clothes, people don't need to try on before buying, which makes it easier for e-commerce. Also, beauty products usually have more discounts online and their price elasticity is high (not necessities as household) so lowering the price would trigger more sales. On the other hand, celebrities usually have good-lookings. Therefore, they are more convincing when promoting a beauty product. 
+
+Overall, it agrees with our hypothesis that consumers came to KOL because they have expertise in a specific category and came to celebrities because of their reputation.
+
+```
+
+
