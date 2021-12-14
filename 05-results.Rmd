@@ -370,57 +370,57 @@ Sys.setlocale("LC_TIME", "English")
 When is the best time for a live streaming sale? This is a question that is worth pondering upon. 
 
 ```{r}
-# data_live_gen_pro$Date <- gsub("200","",data_live_gen_pro$Date)
-# data_live_gen_pro$Start_time <- gsub("200","",data_live_gen_pro$Start_time)
-# data_live_gen_pro$Start_time <- mdy_hm(data_live_gen_pro$Start_time)
-# data_live_gen_pro$Duration = as.character(data_live_gen_pro$Duration)
-# data_live_gen_pro$Fan.Conversion.Ratio = as.character(data_live_gen_pro$Fan.Conversion.Ratio)
-# data_live_gen_pro$Sales_conversion_value_ratio = as.character(data_live_gen_pro$Sales_conversion_value_ratio)
-# data_live_gen_pro$Average_length_of_stay = as.character(data_live_gen_pro$Average_length_of_stay)
-# data_live_gen_pro$Name = as.character(data_live_gen_pro$Name)
-# data_live_gen_pro$Host_category = as.character(data_live_gen_pro$Host_category)
-# data_live_gen_pro$Occupation = as.character(data_live_gen_pro$Occupation)
-# data_clean <- data.frame()
-# for(name in unique(data_live_gen_pro$Name)){
-#   df <- subset(data_live_gen_pro,Name==name)
-#   for(date in unique(df$Date)){
-#     tmp <- subset(df,Date==date)
-#     if(nrow(tmp)==1){
-#       data_clean <- rbind(data_clean,tmp)
-#     }else{
-#       tmp$hour <- hour(tmp$Start_time)
-#       tmp_new <- tmp%>%
-#         group_by(hour)%>%
-#         summarise(Session_id = min(Session_id),
-#                               Start_time = min(Start_time),
-#                               Peak_viewers = sum(Peak_viewers),
-#                               Gifts_from_viewers = sum(Gifts_from_viewers),
-#                               Number_of_products = sum(Number_of_products),
-#                               Number_of_goods_sold = sum(Number_of_goods_sold),
-#                               Total_sales_amount = sum(Total_sales_amount),
-#                               Duration = max(Duration),
-#                               Views = sum(Views),
-#                               Average_number_of_online_viewers = sum(Average_number_of_online_viewers),
-#                               Number_of_likes = sum(Number_of_likes),
-#                               Number_of_new_followers = sum(Number_of_new_followers),
-#                               Fan.Conversion.Ratio = mean(as.numeric(Fan.Conversion.Ratio)),
-#                               Number_of_new_fans = sum(Number_of_new_fans),
-#                               Per_customer_transaction = sum(Per_customer_transaction),
-#                               UV = sum(UV),
-#                               Sales_conversion_value_ratio = mean(as.numeric(Sales_conversion_value_ratio)),
-#                               Average_length_of_stay = max(Average_length_of_stay),
-#                               Name = max(Name),
-#                               Host_category = max(Host_category),
-#                               Occupation = max(Occupation),
-#                               Date = max(Date),
-#                               Se = sum(Se),
-#                               New_LS = sum(New_LS)
-#                               )%>%
-#         select(-hour)
-#         data_clean <- rbind(data_clean,tmp_new)
-#     }
-#   }
-# }
+data_live_gen_pro$Date <- gsub("200","",data_live_gen_pro$Date)
+data_live_gen_pro$Start_time <- gsub("200","",data_live_gen_pro$Start_time)
+data_live_gen_pro$Start_time <- mdy_hm(data_live_gen_pro$Start_time)
+data_live_gen_pro$Duration = as.character(data_live_gen_pro$Duration)
+data_live_gen_pro$Fan.Conversion.Ratio = as.character(data_live_gen_pro$Fan.Conversion.Ratio)
+data_live_gen_pro$Sales_conversion_value_ratio = as.character(data_live_gen_pro$Sales_conversion_value_ratio)
+data_live_gen_pro$Average_length_of_stay = as.character(data_live_gen_pro$Average_length_of_stay)
+data_live_gen_pro$Name = as.character(data_live_gen_pro$Name)
+data_live_gen_pro$Host_category = as.character(data_live_gen_pro$Host_category)
+data_live_gen_pro$Occupation = as.character(data_live_gen_pro$Occupation)
+data_clean <- data.frame()
+for(name in unique(data_live_gen_pro$Name)){
+  df <- subset(data_live_gen_pro,Name==name)
+  for(date in unique(df$Date)){
+    tmp <- subset(df,Date==date)
+    if(nrow(tmp)==1){
+      data_clean <- rbind(data_clean,tmp)
+    }else{
+      tmp$hour <- hour(tmp$Start_time)
+      tmp_new <- tmp%>%
+        group_by(hour)%>%
+        dplyr::summarize(Session_id = min(Session_id),
+                              Start_time = min(Start_time),
+                              Peak_viewers = sum(Peak_viewers),
+                              Gifts_from_viewers = sum(Gifts_from_viewers),
+                              Number_of_products = sum(Number_of_products),
+                              Number_of_goods_sold = sum(Number_of_goods_sold),
+                              Total_sales_amount = sum(Total_sales_amount),
+                              Duration = max(Duration),
+                              Views = sum(Views),
+                              Average_number_of_online_viewers = sum(Average_number_of_online_viewers),
+                              Number_of_likes = sum(Number_of_likes),
+                              Number_of_new_followers = sum(Number_of_new_followers),
+                              Fan.Conversion.Ratio = mean(as.numeric(Fan.Conversion.Ratio)),
+                              Number_of_new_fans = sum(Number_of_new_fans),
+                              Per_customer_transaction = sum(Per_customer_transaction),
+                              UV = sum(UV),
+                              Sales_conversion_value_ratio = mean(as.numeric(Sales_conversion_value_ratio)),
+                              Average_length_of_stay = max(Average_length_of_stay),
+                              Name = max(Name),
+                              Host_category = max(Host_category),
+                              Occupation = max(Occupation),
+                              Date = max(Date),
+                              Se = sum(Se),
+                              New_LS = sum(New_LS)
+                              )%>%
+        select(-hour)
+        data_clean <- rbind(data_clean,tmp_new)
+    }
+  }
+}
 ```
 
 
@@ -429,34 +429,32 @@ When is the best time for a live streaming sale? This is a question that is wort
 Do people tend to buy more on weekdays, on weekends, or there is no difference?
 
 ```{r}
-# data_clean <- subset(data_clean,Se/60>=5)
-# data_clean$weekday <- weekdays(as.POSIXct(data_clean$Start_time), abbreviate = T)
-# data_clean$re <- data_clean$Total_sales_amount
-# data_clean$weekday <-factor(data_clean$weekday,levels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"))
-# data_clean$weekends <- ifelse(data_clean$weekday%in%c("Sat","Sun"),"Weekends","Weekdays")
-# ggplot(data_clean,aes(weekday,re/1000000))+
-#   geom_violin(fill="steelblue",scale="count")+
-#   stat_summary(re =mean, geom="point", size=2, color="red")+
-#   theme_bw()+
-#   labs(y="Total Sales Amount (Millions CNY)")
+data_clean <- subset(data_clean,Se/60>=5)
+data_clean$weekday <- weekdays(as.POSIXct(data_clean$Start_time), abbreviate = T)
+data_clean$re <- data_clean$Total_sales_amount
+data_clean$weekday <-factor(data_clean$weekday,levels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"))
+data_clean$weekends <- ifelse(data_clean$weekday%in%c("Sat","Sun"),"Weekends","Weekdays")
+ggplot(data_clean,aes(weekday,re/1000000))+
+  geom_violin(fill="steelblue",scale="count")+
+  stat_summary(re =mean, geom="point", size=2, color="red")+
+  theme_bw()+
+  labs(y="Total Sales Amount (Millions CNY)")
 
 ```
 
-###![one](one.png)One#####
 
 To gain insights on the relationship of purchasing power to the day of the week, we visualize the total sales amount (Revenue) by each day in the week through a violin plot. To make sure that only the valid live streaming counts in our analysis, we will only include those live streaming last longer than 5 minutes so that the NA values can be eliminated. The plot tells us not only the mean, which is denoted by the red dot but also the distribution of the total sales amount for each day’s live streaming. For all 7 days, most of the sales are clustered in the bottom, while a small number of large values are pulling the mean up. 
 
 As this plot shows, the difference of the seven days in a week in terms of their distribution is not very obvious, as their distribution is similar. But we can still see that Thursday and Monday appear to have lower means compared to the other 5 days. This observation logically makes sense and might be related to consumer behavior in a week, as these two days are the most stressful during a workweek respectively. In general, people like to think of weekends as a time of rest and rejuvenation, and therefore people’s moods are typically at their lowest on Mondays and focus on the transition from relaxation to the new work or school week, which causes them to spend less time and money in watching live streaming. On the other hand, Thursday is the day right before Friday, the end of the work or school week, “the end of the week” feeling pushes people to be stressed and to focus more on their work or study, which might reduce their chance to watch live streaming and accordingly decrease the sales amount. Therefore, in general, selling on Monday and Thursday might be more challenging to generate higher revenue.
 
 ```{r}
-# ggplot(data_clean,aes(weekends,re/1000000))+
-#   geom_violin(fill="steelblue",scale = "width")+
-#   theme_bw()+
-#   stat_summary(re =mean, geom="point", size=2, color="red")+
-#   labs(y="Total Sales Amount (Millions CNY)")
+ggplot(data_clean,aes(weekends,re/1000000))+
+  geom_violin(fill="steelblue",scale = "width")+
+  theme_bw()+
+  stat_summary(re =mean, geom="point", size=2, color="red")+
+  labs(y="Total Sales Amount (Millions CNY)")
 ```
 
-###![two](two.png)two#####
 
 The distribution of sales by the two groups of weekdays and weekends reveals that live streaming sales on weekends are more likely to generate a higher sales amount than those on weekdays. Live streaming sales on weekends also have a higher mean than those on weekdays. These observations suggest that selling on weekends is more likely to increase sales amount, which is in line with our intuition.
 
@@ -467,74 +465,66 @@ The distribution of sales by the two groups of weekdays and weekends reveals tha
 Does the start time of live streaming affect the sales amount?
 
 ```{r,message=FALSE,warning=FALSE}
-# data_clean$hour <- hour(data_clean$Start_time)
-# hour_avg <- aggregate(re~hour,data_clean,mean)
-# ggplot(hour_avg,aes(hour,re/1000000,group=1))+
-#   geom_line()+
-#   geom_point(col="red")+
-#   theme_bw()+
-#   labs(x="Starting Time (Hour)",y="Average Total Sales Amount by Hour (Millions CNY)")
+data_clean$hour <- hour(data_clean$Start_time)
+hour_avg <- aggregate(re~hour,data_clean,mean)
+ggplot(hour_avg,aes(hour,re/1000000,group=1))+
+  geom_line()+
+  geom_point(col="red")+
+  theme_bw()+
+  labs(x="Starting Time (Hour)",y="Average Total Sales Amount by Hour (Millions CNY)")
 ```
 
 We plot the average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, and find those live-streaming started at 10 AM tends to generate a much higher average total sales amount. Those live streaming started at 10 AM appear to be able to achieve an average total sales amount more than 2 times higher than those live-streaming started in the afternoon. This observation suggests that live streaming starting around 10 AM might be the best choice to improve the average total sales amount.
 
-###![three](three.png)#####
 
 Does the start time of live streaming be related to duration?
 
 ```{r,message=FALSE,warning=FALSE}
-# ggplot(data_clean,aes(hour,Se/3600))+
-#   geom_point()+
-#   theme_bw()+
-#    geom_smooth(se=F)+
-#   labs(x="Starting Time (Hour)",y="Duration (hour)")
+ggplot(data_clean,aes(hour,Se/3600))+
+  geom_point()+
+  theme_bw()+
+   geom_smooth(se=F)+
+  labs(x="Starting Time (Hour)",y="Duration (hour)")
 ```
-
-###![four](four.png)#####
 
 
 We plot the duration of live streaming to the starting time, and we find those live streaming started around 10 AM tends to have a longer live streaming duration. The smooth curve also indicates the same information that the live streaming started around 10 AM has the peaked duration, and after 10 AM, the duration decreases by time. In addition, the smooth curve shows a similar pattern as the plot of average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, which indicates live streaming duration is positively related to the average total sales amounts in each hour.
 
 ```{r,message=FALSE,warning=FALSE}
-# ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
-#   geom_point(col="steelblue")+
-#   geom_smooth(method = "lm",se=F,col="black")+
-#   theme_bw()+
-#    labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
+ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
+  geom_point(col="steelblue")+
+  geom_smooth(method = "lm",se=F,col="black")+
+  theme_bw()+
+   labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
 ```
 
-###![five](five.png)#####
 
 This plot reaffirms that live streaming duration is positively related to the average total sales amounts in each hour.
 
 
 ```{r}
-# ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
-#   geom_point()+
-#   geom_smooth(method = "lm",se=F)+
-#   facet_wrap(~Host_category)+
-#   theme_bw()+
-#   labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
+ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
+  geom_point()+
+  geom_smooth(method = "lm",se=F)+
+  facet_wrap(~Host_category)+
+  theme_bw()+
+  labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
 ```
 
-
-###![six](six.png)#####
 
 Then we analyze the plot of average Sale Amount by hours to duration facet by whether the host is a KOL or not. As the plot shows, the slope of KOL is much steeper, which indicates that the positive relationship between the average total sales amounts in each hour and duration appears to be more significant for KOLs than the non-KOLs.
 
 
 ### The relationship between average stay length and sales amount
 ```{r,message=FALSE,warning=FALSE}
-# ggplot(data_clean,aes(New_LS,re/1000000))+
-#   geom_point(col="steelblue")+
-#   geom_vline(xintercept = 2.5,lwd=0.8)+
-#   geom_smooth(se=F,col="red")+
-#   facet_wrap(~Host_category)+
-#   theme_bw()+
-#   labs(x="Stay time (min)",y="Total Sales Amount (Millions CNY)")
+ggplot(data_clean,aes(New_LS,re/1000000))+
+  geom_point(col="steelblue")+
+  geom_vline(xintercept = 2.5,lwd=0.8)+
+  geom_smooth(se=F,col="red")+
+  facet_wrap(~Host_category)+
+  theme_bw()+
+  labs(x="Stay time (min)",y="Total Sales Amount (Millions CNY)")
 ```
-
-###![seven](seven.png)#####
 
 When analyzing a viewer’s average stay length in a host’s live streaming, we find an average stay time of 2.5 minutes appear to be the best choice, at which the total sales amount tends to be the highest, no matter the host is a KOL or not. Also, the stay time of KOL’s streaming room scattered more dispersed than that of non-KOLs, ranging from 1 to 8 minutes. On the other hand, the data points of non-KOLs are more clustered, and most of them are less than 3 minutes.
 
