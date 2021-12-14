@@ -19,10 +19,10 @@ var data = [
 "WangZulan":0,
 "TuLei":0,
 "ZhangTing":0,
-"Mr.DongJewelry":0
+"DongJewelry":0
 },
   
-  {"date":"2021-06-01T00:00:00.000Z",
+ {"date":"2021-06-01T00:00:00.000Z",
 "LuoYonghao":5872577.48,
 "LiuYuanyuan":164830.79,
 "AresCheng":42009322.79,
@@ -42,7 +42,7 @@ var data = [
 "WangZulan":0,
 "TuLei":29036084.96,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":0
+"DongJewelry":0
 },
 {"date":"2021-06-02T00:00:00.000Z",
 "LuoYonghao":14982877.42,
@@ -64,7 +64,7 @@ var data = [
 "WangZulan":0,
 "TuLei":29036084.96,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":0
+"DongJewelry":0
 },
 {"date":"2021-06-03T00:00:00.000Z",
 "LuoYonghao":21683793.27,
@@ -86,7 +86,7 @@ var data = [
 "WangZulan":0,
 "TuLei":29036084.96,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":0
+"DongJewelry":0
 },
 {"date":"2021-06-04T00:00:00.000Z",
 "LuoYonghao":32774202.34,
@@ -108,7 +108,7 @@ var data = [
 "WangZulan":0,
 "TuLei":29036084.96,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":45508786.0
+"DongJewelry":45508786.0
 },
 {"date":"2021-06-05T00:00:00.000Z",
 "LuoYonghao":59423566.16,
@@ -130,7 +130,7 @@ var data = [
 "WangZulan":0,
 "TuLei":39633711.54,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":45508786.0
+"DongJewelry":45508786.0
 },
 {"date":"2021-06-06T00:00:00.000Z",
 "LuoYonghao":70693849.61,
@@ -152,7 +152,7 @@ var data = [
 "WangZulan":0,
 "TuLei":39633711.54,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":77952504.01
+"DongJewelry":77952504.01
 },
 {"date":"2021-06-07T00:00:00.000Z",
 "LuoYonghao":78534929.1,
@@ -174,7 +174,7 @@ var data = [
 "WangZulan":0,
 "TuLei":39633711.54,
 "ZhangTing":1280733.97,
-"Mr.DongJewelry":77952504.01
+"DongJewelry":77952504.01
 },
 {"date":"2021-06-08T00:00:00.000Z",
 "LuoYonghao":89027571.82,
@@ -196,7 +196,7 @@ var data = [
 "WangZulan":0,
 "TuLei":49651651.54,
 "ZhangTing":4579637.8,
-"Mr.DongJewelry":77952504.01
+"DongJewelry":77952504.01
 },
 {"date":"2021-06-09T00:00:00.000Z",
 "LuoYonghao":97641002.91,
@@ -218,7 +218,7 @@ var data = [
 "WangZulan":0,
 "TuLei":49667870.54,
 "ZhangTing":4579637.8,
-"Mr.DongJewelry":140946994.31
+"DongJewelry":140946994.31
 },
 {"date":"2021-06-10T00:00:00.000Z",
 "LuoYonghao":104661167.36,
@@ -240,7 +240,7 @@ var data = [
 "WangZulan":0,
 "TuLei":49667870.54,
 "ZhangTing":4579637.8,
-"Mr.DongJewelry":140946994.31
+"DongJewelry":140946994.31
 },
 {"date":"2021-06-11T00:00:00.000Z",
 "LuoYonghao":117878406.52,
@@ -262,7 +262,7 @@ var data = [
 "WangZulan":0,
 "TuLei":49667870.54,
 "ZhangTing":4579637.8,
-"Mr.DongJewelry":140946994.31
+"DongJewelry":140946994.31
 },
 {"date":"2021-06-12T00:00:00.000Z",
 "LuoYonghao":132110679.64999999,
@@ -284,7 +284,7 @@ var data = [
 "WangZulan":0,
 "TuLei":59781219.46,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":181358172.9
+"DongJewelry":181358172.9
 },
 {"date":"2021-06-13T00:00:00.000Z",
 "LuoYonghao":145110915.23999998,
@@ -306,7 +306,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":181358172.9
+"DongJewelry":181358172.9
 },
 {"date":"2021-06-14T00:00:00.000Z",
 "LuoYonghao":151250310.43999997,
@@ -328,7 +328,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":181358172.9
+"DongJewelry":181358172.9
 },
 {"date":"2021-06-15T00:00:00.000Z",
 "LuoYonghao":158920495.48999998,
@@ -350,7 +350,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":181358172.9
+"DongJewelry":181358172.9
 },
 {"date":"2021-06-16T00:00:00.000Z",
 "LuoYonghao":189492675.60999998,
@@ -372,7 +372,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":221461031.37
+"DongJewelry":221461031.37
 },
 {"date":"2021-06-17T00:00:00.000Z",
 "LuoYonghao":199627817.29999998,
@@ -394,7 +394,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":132876728.8,
-"Mr.DongJewelry":221461031.37
+"DongJewelry":221461031.37
 },
 {"date":"2021-06-18T00:00:00.000Z",
 "LuoYonghao":213377761.04,
@@ -416,7 +416,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":272858673.77
+"DongJewelry":272858673.77
 },
 {"date":"2021-06-19T00:00:00.000Z",
 "LuoYonghao":223945101.43,
@@ -438,7 +438,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":272858673.77
+"DongJewelry":272858673.77
 },
 {"date":"2021-06-20T00:00:00.000Z",
 "LuoYonghao":233027679.86,
@@ -460,7 +460,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":272858673.77
+"DongJewelry":272858673.77
 },
 {"date":"2021-06-21T00:00:00.000Z",
 "LuoYonghao":239039243.89000002,
@@ -482,7 +482,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":272858673.77
+"DongJewelry":272858673.77
 },
 {"date":"2021-06-22T00:00:00.000Z",
 "LuoYonghao":244706887.48000002,
@@ -504,7 +504,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":317683600.89
+"DongJewelry":317683600.89
 },
 {"date":"2021-06-23T00:00:00.000Z",
 "LuoYonghao":253710676.10000002,
@@ -526,7 +526,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":317683600.89
+"DongJewelry":317683600.89
 },
 {"date":"2021-06-24T00:00:00.000Z",
 "LuoYonghao":263739355.88000003,
@@ -548,7 +548,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":317683600.89
+"DongJewelry":317683600.89
 },
 {"date":"2021-06-25T00:00:00.000Z",
 "LuoYonghao":275375868.92,
@@ -570,7 +570,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":137318688.66,
-"Mr.DongJewelry":317683600.89
+"DongJewelry":317683600.89
 },
 {"date":"2021-06-26T00:00:00.000Z",
 "LuoYonghao":284754351.7,
@@ -592,7 +592,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":317683600.89
+"DongJewelry":317683600.89
 },
 {"date":"2021-06-27T00:00:00.000Z",
 "LuoYonghao":294833033.42,
@@ -614,7 +614,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":347227117.34999996
+"DongJewelry":347227117.34999996
 },
 {"date":"2021-06-28T00:00:00.000Z",
 "LuoYonghao":303214567.6,
@@ -636,7 +636,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":347227117.34999996
+"DongJewelry":347227117.34999996
 },
 {"date":"2021-06-29T00:00:00.000Z",
 "LuoYonghao":311667757.08000004,
@@ -658,7 +658,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":376330107.85999995
+"DongJewelry":376330107.85999995
 },
 {"date":"2021-06-30T00:00:00.000Z",
 "LuoYonghao":328690037.83000004,
@@ -680,7 +680,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":376330107.85999995
+"DongJewelry":376330107.85999995
 },
 {"date":"2021-07-01T00:00:00.000Z",
 "LuoYonghao":328690037.83000004,
@@ -702,7 +702,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":376330107.85999995
+"DongJewelry":376330107.85999995
 },
 {"date":"2021-07-02T00:00:00.000Z",
 "LuoYonghao":340191304.40000004,
@@ -724,7 +724,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":146356503.69,
-"Mr.DongJewelry":402416113.64
+"DongJewelry":402416113.64
 },
 {"date":"2021-07-03T00:00:00.000Z",
 "LuoYonghao":355358885.84000003,
@@ -746,7 +746,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":402416113.64
+"DongJewelry":402416113.64
 },
 {"date":"2021-07-04T00:00:00.000Z",
 "LuoYonghao":365017462.66,
@@ -768,7 +768,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":425582173.75
+"DongJewelry":425582173.75
 },
 {"date":"2021-07-05T00:00:00.000Z",
 "LuoYonghao":371214503.02000004,
@@ -790,7 +790,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":425582173.75
+"DongJewelry":425582173.75
 },
 {"date":"2021-07-06T00:00:00.000Z",
 "LuoYonghao":378097844.22,
@@ -812,7 +812,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":425582173.75
+"DongJewelry":425582173.75
 },
 {"date":"2021-07-07T00:00:00.000Z",
 "LuoYonghao":387229564.81,
@@ -834,7 +834,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":425582173.75
+"DongJewelry":425582173.75
 },
 {"date":"2021-07-08T00:00:00.000Z",
 "LuoYonghao":401308072.88,
@@ -856,7 +856,7 @@ var data = [
 "WangZulan":0,
 "TuLei":69840160.72,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":425582173.75
+"DongJewelry":425582173.75
 },
 {"date":"2021-07-09T00:00:00.000Z",
 "LuoYonghao":415165591.19,
@@ -878,7 +878,7 @@ var data = [
 "WangZulan":0,
 "TuLei":74215652.11,
 "ZhangTing":160713667.94,
-"Mr.DongJewelry":449102775.71
+"DongJewelry":449102775.71
 },
 {"date":"2021-07-10T00:00:00.000Z",
 "LuoYonghao":430245635.55,
@@ -900,7 +900,7 @@ var data = [
 "WangZulan":0,
 "TuLei":74215652.11,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":449102775.71
+"DongJewelry":449102775.71
 },
 {"date":"2021-07-11T00:00:00.000Z",
 "LuoYonghao":447564727.1,
@@ -922,7 +922,7 @@ var data = [
 "WangZulan":0,
 "TuLei":74215652.11,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":449102775.71
+"DongJewelry":449102775.71
 },
 {"date":"2021-07-12T00:00:00.000Z",
 "LuoYonghao":454973053.09000003,
@@ -944,7 +944,7 @@ var data = [
 "WangZulan":0,
 "TuLei":74215652.11,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":449102775.71
+"DongJewelry":449102775.71
 },
 {"date":"2021-07-13T00:00:00.000Z",
 "LuoYonghao":463845707.36,
@@ -966,7 +966,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":467189503.77
+"DongJewelry":467189503.77
 },
 {"date":"2021-07-14T00:00:00.000Z",
 "LuoYonghao":474114597.41,
@@ -988,7 +988,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":467189503.77
+"DongJewelry":467189503.77
 },
 {"date":"2021-07-15T00:00:00.000Z",
 "LuoYonghao":489531719.07000005,
@@ -1010,7 +1010,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":487627367.43
+"DongJewelry":487627367.43
 },
 {"date":"2021-07-16T00:00:00.000Z",
 "LuoYonghao":502842220.3000001,
@@ -1032,7 +1032,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":178047069.38,
-"Mr.DongJewelry":487627367.43
+"DongJewelry":487627367.43
 },
 {"date":"2021-07-17T00:00:00.000Z",
 "LuoYonghao":604271237.9000001,
@@ -1054,7 +1054,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":489121553.54
+"DongJewelry":489121553.54
 },
 {"date":"2021-07-18T00:00:00.000Z",
 "LuoYonghao":612509948.0600001,
@@ -1076,7 +1076,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":489121553.54
+"DongJewelry":489121553.54
 },
 {"date":"2021-07-19T00:00:00.000Z",
 "LuoYonghao":620846902.37,
@@ -1098,7 +1098,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":489121553.54
+"DongJewelry":489121553.54
 },
 {"date":"2021-07-20T00:00:00.000Z",
 "LuoYonghao":633076656.5,
@@ -1120,7 +1120,7 @@ var data = [
 "WangZulan":0,
 "TuLei":79272421.17,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":499558491.77000004
+"DongJewelry":499558491.77000004
 },
 {"date":"2021-07-21T00:00:00.000Z",
 "LuoYonghao":640293788.03,
@@ -1142,7 +1142,7 @@ var data = [
 "WangZulan":0,
 "TuLei":83636412.97,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":499558491.77000004
+"DongJewelry":499558491.77000004
 },
 {"date":"2021-07-22T00:00:00.000Z",
 "LuoYonghao":650294581.28,
@@ -1164,7 +1164,7 @@ var data = [
 "WangZulan":0,
 "TuLei":83636412.97,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":516599724.24
+"DongJewelry":516599724.24
 },
 {"date":"2021-07-23T00:00:00.000Z",
 "LuoYonghao":663865415.92,
@@ -1186,7 +1186,7 @@ var data = [
 "WangZulan":0,
 "TuLei":83636412.97,
 "ZhangTing":199326199.06,
-"Mr.DongJewelry":516599724.24
+"DongJewelry":516599724.24
 },
 {"date":"2021-07-24T00:00:00.000Z",
 "LuoYonghao":672963308.99,
@@ -1208,7 +1208,7 @@ var data = [
 "WangZulan":0,
 "TuLei":92016809.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":516599724.24
+"DongJewelry":516599724.24
 },
 {"date":"2021-07-25T00:00:00.000Z",
 "LuoYonghao":683676223.79,
@@ -1230,7 +1230,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":536872844.65
+"DongJewelry":536872844.65
 },
 {"date":"2021-07-26T00:00:00.000Z",
 "LuoYonghao":694880971.3399999,
@@ -1252,7 +1252,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":536872844.65
+"DongJewelry":536872844.65
 },
 {"date":"2021-07-27T00:00:00.000Z",
 "LuoYonghao":708606460.2299999,
@@ -1274,7 +1274,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":560871684.39
+"DongJewelry":560871684.39
 },
 {"date":"2021-07-28T00:00:00.000Z",
 "LuoYonghao":716295398.7899998,
@@ -1296,7 +1296,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":560871684.39
+"DongJewelry":560871684.39
 },
 {"date":"2021-07-29T00:00:00.000Z",
 "LuoYonghao":725493659.3199998,
@@ -1318,7 +1318,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":566717227.21
+"DongJewelry":566717227.21
 },
 {"date":"2021-07-30T00:00:00.000Z",
 "LuoYonghao":730490473.9099998,
@@ -1340,7 +1340,7 @@ var data = [
 "WangZulan":0,
 "TuLei":94394174.47,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":566717227.21
+"DongJewelry":566717227.21
 },
 {"date":"2021-07-31T00:00:00.000Z",
 "LuoYonghao":748637457.8799999,
@@ -1362,7 +1362,7 @@ var data = [
 "WangZulan":0,
 "TuLei":109956412.36,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":582064922.96
+"DongJewelry":582064922.96
 },
 {"date":"2021-08-01T00:00:00.000Z",
 "LuoYonghao":761822376.0899999,
@@ -1384,7 +1384,7 @@ var data = [
 "WangZulan":20371518.7,
 "TuLei":109956412.36,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":582064922.96
+"DongJewelry":582064922.96
 },
 {"date":"2021-08-02T00:00:00.000Z",
 "LuoYonghao":770609720.17,
@@ -1406,7 +1406,7 @@ var data = [
 "WangZulan":34640096.7,
 "TuLei":109956412.36,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":582064922.96
+"DongJewelry":582064922.96
 },
 {"date":"2021-08-03T00:00:00.000Z",
 "LuoYonghao":777675281.0699999,
@@ -1428,7 +1428,7 @@ var data = [
 "WangZulan":46731251.67,
 "TuLei":122327567.78999999,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":584836515.22
+"DongJewelry":584836515.22
 },
 {"date":"2021-08-04T00:00:00.000Z",
 "LuoYonghao":788420628.14,
@@ -1450,7 +1450,7 @@ var data = [
 "WangZulan":51926563.77,
 "TuLei":122327567.78999999,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":584836515.22
+"DongJewelry":584836515.22
 },
 {"date":"2021-08-05T00:00:00.000Z",
 "LuoYonghao":797145628.28,
@@ -1472,7 +1472,7 @@ var data = [
 "WangZulan":60349032.07000001,
 "TuLei":122327567.78999999,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":584836515.22
+"DongJewelry":584836515.22
 },
 {"date":"2021-08-06T00:00:00.000Z",
 "LuoYonghao":809904082.3399999,
@@ -1494,7 +1494,7 @@ var data = [
 "WangZulan":71024723.24000001,
 "TuLei":122327567.78999999,
 "ZhangTing":229332713.05,
-"Mr.DongJewelry":652557704.3100001
+"DongJewelry":652557704.3100001
 },
 {"date":"2021-08-07T00:00:00.000Z",
 "LuoYonghao":830468549.5099999,
@@ -1516,7 +1516,7 @@ var data = [
 "WangZulan":71024723.24000001,
 "TuLei":122327567.78999999,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":652557704.3100001
+"DongJewelry":652557704.3100001
 },
 {"date":"2021-08-08T00:00:00.000Z",
 "LuoYonghao":929888286.0399998,
@@ -1538,7 +1538,7 @@ var data = [
 "WangZulan":79627745.84,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":652557704.3100001
+"DongJewelry":652557704.3100001
 },
 {"date":"2021-08-09T00:00:00.000Z",
 "LuoYonghao":941188676.3799999,
@@ -1560,7 +1560,7 @@ var data = [
 "WangZulan":87515661.54,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":652557704.3100001
+"DongJewelry":652557704.3100001
 },
 {"date":"2021-08-10T00:00:00.000Z",
 "LuoYonghao":953286587.0899999,
@@ -1582,7 +1582,7 @@ var data = [
 "WangZulan":87515661.54,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":675394087.9000001
+"DongJewelry":675394087.9000001
 },
 {"date":"2021-08-11T00:00:00.000Z",
 "LuoYonghao":967132807.1199999,
@@ -1604,7 +1604,7 @@ var data = [
 "WangZulan":87515661.54,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":675394087.9000001
+"DongJewelry":675394087.9000001
 },
 {"date":"2021-08-12T00:00:00.000Z",
 "LuoYonghao":980760033.9799999,
@@ -1626,7 +1626,7 @@ var data = [
 "WangZulan":87515661.54,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":716695124.8100001
+"DongJewelry":716695124.8100001
 },
 {"date":"2021-08-13T00:00:00.000Z",
 "LuoYonghao":993574607.1099999,
@@ -1648,7 +1648,7 @@ var data = [
 "WangZulan":106175244.43,
 "TuLei":159246999.89,
 "ZhangTing":269161252.22,
-"Mr.DongJewelry":716695124.8100001
+"DongJewelry":716695124.8100001
 },
 {"date":"2021-08-14T00:00:00.000Z",
 "LuoYonghao":1006383625.2799999,
@@ -1670,7 +1670,7 @@ var data = [
 "WangZulan":106175244.43,
 "TuLei":159246999.89,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":716695124.8100001
+"DongJewelry":716695124.8100001
 },
 {"date":"2021-08-15T00:00:00.000Z",
 "LuoYonghao":1021824962.4799999,
@@ -1692,7 +1692,7 @@ var data = [
 "WangZulan":112187205.92,
 "TuLei":159246999.89,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":758603946.3100001
+"DongJewelry":758603946.3100001
 },
 {"date":"2021-08-16T00:00:00.000Z",
 "LuoYonghao":1031515151.06,
@@ -1714,7 +1714,7 @@ var data = [
 "WangZulan":113928926.96000001,
 "TuLei":159246999.89,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":758603946.3100001
+"DongJewelry":758603946.3100001
 },
 {"date":"2021-08-17T00:00:00.000Z",
 "LuoYonghao":1040763804.18,
@@ -1736,7 +1736,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":165118081.54999998,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":789804368.96
+"DongJewelry":789804368.96
 },
 {"date":"2021-08-18T00:00:00.000Z",
 "LuoYonghao":1174247888.8799999,
@@ -1758,7 +1758,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":789804368.96
+"DongJewelry":789804368.96
 },
 {"date":"2021-08-19T00:00:00.000Z",
 "LuoYonghao":1182411113.4699998,
@@ -1780,7 +1780,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":789804368.96
+"DongJewelry":789804368.96
 },
 {"date":"2021-08-20T00:00:00.000Z",
 "LuoYonghao":1193768627.2599998,
@@ -1802,7 +1802,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":297392687.88000005,
-"Mr.DongJewelry":789804368.96
+"DongJewelry":789804368.96
 },
 {"date":"2021-08-21T00:00:00.000Z",
 "LuoYonghao":1206855439.0899997,
@@ -1824,7 +1824,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":820159425.23
+"DongJewelry":820159425.23
 },
 {"date":"2021-08-22T00:00:00.000Z",
 "LuoYonghao":1216970252.3399997,
@@ -1846,7 +1846,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":820159425.23
+"DongJewelry":820159425.23
 },
 {"date":"2021-08-23T00:00:00.000Z",
 "LuoYonghao":1226966882.3199997,
@@ -1868,7 +1868,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":820159425.23
+"DongJewelry":820159425.23
 },
 {"date":"2021-08-24T00:00:00.000Z",
 "LuoYonghao":1245084921.2999997,
@@ -1890,7 +1890,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":850672840.26
+"DongJewelry":850672840.26
 },
 {"date":"2021-08-25T00:00:00.000Z",
 "LuoYonghao":1260052640.8599997,
@@ -1912,7 +1912,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":185694792.86999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":850672840.26
+"DongJewelry":850672840.26
 },
 {"date":"2021-08-26T00:00:00.000Z",
 "LuoYonghao":1272043030.3199997,
@@ -1934,7 +1934,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":196507715.27999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":891969493.62
+"DongJewelry":891969493.62
 },
 {"date":"2021-08-27T00:00:00.000Z",
 "LuoYonghao":1283325724.4399996,
@@ -1956,7 +1956,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":196507715.27999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":891969493.62
+"DongJewelry":891969493.62
 },
 {"date":"2021-08-28T00:00:00.000Z",
 "LuoYonghao":1297815709.9099996,
@@ -1978,7 +1978,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":196507715.27999997,
 "ZhangTing":308879537.89000005,
-"Mr.DongJewelry":918756006.49
+"DongJewelry":918756006.49
 },
 {"date":"2021-08-29T00:00:00.000Z",
 "LuoYonghao":1309871400.2799995,
@@ -2000,7 +2000,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":196507715.27999997,
 "ZhangTing":331684932.44000006,
-"Mr.DongJewelry":918756006.49
+"DongJewelry":918756006.49
 },
 {"date":"2021-08-30T00:00:00.000Z",
 "LuoYonghao":1321781304.4999995,
@@ -2022,7 +2022,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":196507715.27999997,
 "ZhangTing":331684932.44000006,
-"Mr.DongJewelry":918756006.49
+"DongJewelry":918756006.49
 },
 {"date":"2021-08-31T00:00:00.000Z",
 "LuoYonghao":1333455860.3799996,
@@ -2044,7 +2044,7 @@ var data = [
 "WangZulan":125250464.69000001,
 "TuLei":205107919.48999998,
 "ZhangTing":331684932.44000006,
-"Mr.DongJewelry":950640240.95
+"DongJewelry":950640240.95
 }
   
   

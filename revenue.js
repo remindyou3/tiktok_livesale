@@ -32,7 +32,6 @@ var options = {
             { name: "LiuYuanyuan",   show: true },
             { name: "AresCheng", show: true },
             { name: "JiaNailiang", show: true },
-            
             { name: "QiWei", show: true },
             { name: "ZhuZixiao", show: true },
             { name: "ZiAn", show: true },
@@ -48,7 +47,7 @@ var options = {
             { name: "WangZulan", show: true },
             { name: "TuLei", show: true },
             { name: "ZhangTing", show: true },
-            { name: "Mr.DongJewelry", show: true }
+            { name: "DongJewelry", show: true }
         ];
         
         var datalist = [];
@@ -152,6 +151,9 @@ var options = {
                         .attr("class", "line-path-" + item.name)
                         .attr("d", linePath)
                         .attr("fill", "none")
+                        .transition() // Call Transition Method
+    .duration(2000) // Set Duration timing (ms)
+  .ease(d3.easeLinear) // Set Easing option
                         .attr("stroke-width", 1)
                         .attr("stroke", function (d, i) {
                             return colorScale(item.name);
