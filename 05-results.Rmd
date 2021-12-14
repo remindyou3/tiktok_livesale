@@ -1,7 +1,7 @@
 # Results
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+#knitr::opts_chunk$set(echo = FALSE)
 library(tidyr)
 library(plyr)
 library(ggpubr)
