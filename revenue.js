@@ -98,9 +98,7 @@ var options = {
         //  绘制Y轴标题
         svg.append("g")
             .attr("class", "y-axis-title")
-            .attr("transform", "translate(-50," + (yAxisTitle.length * 8 + 10) + ")")
             .append("text")
-            .style("transform", "rotate(-90deg)")
             .text(yAxisTitle);
 
         d3.select(".filter-box")
@@ -119,11 +117,7 @@ var options = {
                 d.show = !d.show;
                 update();
             });
-        d3.select("#year-list")
-            .on("change", function () {
-                currentYear = this.value;
-                update();
-            })
+
         function update() {
             var sublist = currentYear === "all"
                 ? datalist : datalist.filter(e => e.date.getFullYear() === currentYear * 1);
