@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Interactive component tryout | Tiktok Livesale Edav Project</title>
+  <meta name="description" content="Chapter 8 Interactive component tryout | Tiktok Livesale Edav Project" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Interactive component tryout | Tiktok Livesale Edav Project" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Interactive component tryout | Tiktok Livesale Edav Project" />
+  
+  
+  
+
+<meta name="author" content="Jessie Wang, Jingyuan Chen, Megan Zhou" />
+
+
+<meta name="date" content="2021-12-12" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conclusion.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Tiktok Livesale Project</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="8" data-path="interactive-component-tryout.html"><a href="interactive-component-tryout.html"><i class="fa fa-check"></i><b>8</b> Interactive component tryout</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tiktok Livesale Edav Project</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="interactive-component-tryout" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Interactive component tryout</h1>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>
+EDAV7_1_axes
+</title>
+<script src="https://d3js.org/d3.v6.js"></script>
+</head>
+<body>
+<h3>
+Hermès Revenue by Geographical Area from 2010 to 2020
+</h3>
+<h4>
+(in millions of euros)
+</h4>
+<h4>
+By Year:
+</h4>
+<p>
+<input
+        type="radio"
+        onclick="update(data2010)"
+        name="typeofaction"
+        value="data2010"
+      />2010
+<input
+        type="radio"
+        onclick="update(data2011)"
+        name="typeofaction"
+        value="data2011"
+      />2011
+<input
+        type="radio"
+        onclick="update(data2012)"
+        name="typeofaction"
+        value="data2012"
+      />2012
+<input
+        type="radio"
+        onclick="update(data2013)"
+        name="typeofaction"
+        value="data2013"
+      />2013
+<input
+        type="radio"
+        onclick="update(data2014)"
+        name="typeofaction"
+        value="data2014"
+      />2014
+<input
+        type="radio"
+        onclick="update(data2015)"
+        name="typeofaction"
+        value="data2015"
+      />2015
+<input
+        type="radio"
+        onclick="update(data2016)"
+        name="typeofaction"
+        value="data2016"
+      />2016
+<input
+        type="radio"
+        onclick="update(data2017)"
+        name="typeofaction"
+        value="data2017"
+      />2017
+<input
+        type="radio"
+        onclick="update(data2018)"
+        name="typeofaction"
+        value="data2018"
+      />2018
+<input
+        type="radio"
+        onclick="update(data2019)"
+        name="typeofaction"
+        value="data2019"
+      />2019
+<input
+        type="radio"
+        onclick="update(data2020)"
+        name="typeofaction"
+        value="data2020"
+        checked="true"
+      />2020
+</p>
+<div>
+
+</div>
+<script>
+      // Create svg and initial bars
+
+      var w = 500;
+      var h = 400;
+      var margin = {
+        top: 50,
+        right: 0,
+        bottom: 50,
+        left: 50,
+      };
+      var innerWidth = w - margin.left - margin.right;
+      var innerHeight = h - margin.top - margin.bottom;
+
+      var data2010 = [1084, 901, 385, 31];
+      var data2011 = [1280, 1055, 464, 43];
+      var data2012 = [1645, 1217, 569, 53];
+      var data2013 = [1711, 1350, 627, 66];
+      var data2014 = [1889, 1444, 711, 74];
+      var data2015 = [2294, 1590, 884, 73];
+      var data2016 = [2502, 1683, 941, 77];
+      var data2017 = [2663, 1799, 996, 92];
+      var data2018 = [2891, 1909, 1059, 108];
+      var data2019 = [3454, 2069, 1241, 120];
+      var data2020 = [3749, 1573, 959, 108];
+
+      var geo = [
+        'Asia-Pacific',
+        'Europe',
+        'Americas',
+        'Other',
+      ];
+
+      var xScale = d3
+        .scaleBand()
+        .domain(geo)
+        .range([0, innerWidth])
+        .paddingInner(0.1);
+
+      var yScale = d3
+        .scaleLinear()
+        .domain([0, 3800])
+        .range([innerHeight, 0]);
+
+      var xAxis = d3.axisBottom().scale(xScale);
+
+      var yAxis = d3.axisLeft().scale(yScale);
+
+      // add svg
+
+      var svg = d3
+        .select('div')
+        .append('svg')
+        .attr('width', w)
+        .attr('height', h);
+
+      // add background rectangle
+
+      svg
+        .append('rect')
+        .attr('class', 'background')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', w)
+        .attr('height', h)
+        .attr('fill', 'whitesmoke');
+
+      // add bars as a group
+
+      var bars = svg
+        .append('g')
+        .attr('id', 'plot')
+        .attr(
+          'transform',
+          `translate (${margin.left}, ${margin.top})`
+        )
+        .selectAll('rect')
+        .data(data2020);
+
+      bars
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', (d, i) => xScale(geo[i]))
+        .attr('y', (d) => yScale(d))
+        .attr('width', xScale.bandwidth())
+        .attr('height', (d) => innerHeight - yScale(d))
+        .attr('fill', 'darkorange');
+
+      // add axes
+
+      svg
+        .append('g')
+        .attr('class', 'xAxis')
+        .attr(
+          'transform',
+          `translate (${margin.left}, ${h - margin.bottom})`
+        )
+        .call(xAxis);
+
+      svg
+        .append('g')
+        .attr('class', 'yAxis')
+        .attr(
+          'transform',
+          `translate (${margin.left}, ${margin.top})`
+        )
+        .call(yAxis);
+
+      //add text
+
+      var svg2 = d3
+        .select('div')
+        .append('svg')
+        .attr('width', 200)
+        .attr('height', 150);
+      svg2
+        .selectAll('text.rev')
+        .data(data2020)
+        .enter()
+        .append('text')
+        .attr('class', 'rev')
+        .attr('x', 30)
+        .attr('y', (d, i) => i * 25 + 25)
+        .text((d, i) => geo[i] + ' : ' + d);
+      var total = [
+        2401,
+        2842,
+        3484,
+        3754,
+        4118,
+        4841,
+        5203,
+        5550,
+        5967,
+        6884,
+        6389,
+      ];
+
+      svg2
+        .append('text')
+        .attr('class', 'total')
+        .attr('x', 30)
+        .attr('y', 125)
+        .text('Total: ' + d3.sum(data2020.map((d) => d)));
+
+      // Update by year
+      function update(data) {
+        var u = svg
+          .selectAll('rect.bar')
+          .data(data)
+          .transition()
+          .duration(1000)
+          .attr('x', (d, i) => xScale(geo[i]))
+          .attr('y', (d) => yScale(d))
+          .attr('width', xScale.bandwidth())
+          .attr('height', (d) => innerHeight - yScale(d))
+          .attr('fill', 'darkorange');
+        var t = svg2
+          .selectAll('text.rev')
+          .data(data)
+          .text((d, i) => geo[i] + ' : ' + d);
+        var total = svg2
+          .selectAll('text.total')
+          .text('Total: ' + d3.sum(data.map((d) => d)));
+      }
+    </script>
+</body>
+</html>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conclusion.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/meganzhou62/tiktok_livesale/edit/main/tryout.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/meganzhou62/tiktok_livesale/blob/main/tryout.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
