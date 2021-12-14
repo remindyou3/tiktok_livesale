@@ -1,1 +1,545 @@
 # Results
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+```
+
+## Do celebrities have an advantage over KOLs in live streaming sales?
+
+From 2021/06 to 2021/08, among top20 hosts, KOL generated more revenue than celebrities.
+
+Do celebrities have an advantage over KOLs (key opinion leader)? In particular, what’s the revenue comparison between the two groups? 
+
+We have a hypothesis that people come to celebrities’ live streaming rooms because they like the person and come to KOLs’ live streaming rooms because KOLs offer a higher discount or have expertise in the specific area. 
+We will focus on the top 20 hosts’ sales data in the past quarter to answer the questions. We will first define people to be celebrities if they are famous actors/actresses/singers based on our common judgments. Then we will look at their sales data in different categories and test our hypothesis.
+
+### Overview of the sale revenue distribution per day
+
+```{r, echo=FALSE}
+livestream <- read_csv("https://raw.githubusercontent.com/meganzhou62/tiktok_livesale/main/processed%20data/Data_Livestream_General_processed.csv")
+#livestream
+
+#change date
+livestream$Date <- as.Date(livestream$Date,format='%m/%d/%y')
+livestream$Host_category<-as.factor(livestream$Host_category)
+
+
+#group revenue by day, host
+total_by_day<-livestream %>% group_by(Name, Host_category, Date) %>%
+  dplyr::summarize(Sales_amount_total = sum(Total_sales_amount,na.rm=TRUE),n=n()) %>%
+  ungroup()
+
+average<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_avg = mean(Sales_amount_total,na.rm=TRUE))  
+  
+total<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_total = sum(Sales_amount_total,na.rm=TRUE),n=n()) %>%
+  left_join(average, by=c("Name", "Host_category"))
+```
+
+```{r}
+#sales distribution: KOLs host more streaming than c; KOLs sell more than c
+ggplot(total_by_day, aes(Sales_amount_total/1000000)) +
+geom_histogram()+ 
+ggtitle("Counts versus Sale Revenue per Day")+
+facet_wrap(~Host_category)+
+xlab("Sale Revenue per Day (in millions CNY)")+
+scale_x_continuous(labels = scales::comma)
+```
+
+This graph gives an overview of the sale revenue distribution per day. We can see from the graph that daily revenue distribution is right skewed for both celebrities and KOLs. Most daily sales from June 2021 to August 2021 were less than 20 million Chinese Yuan (~3.2m US dollars). Both celebrities and KOLs had generated sales that were more than 50m yuan with celebrities having more positive outliers than KOLs.
+
+We can also see from the graph that KOLs held more livestream than celebrities within the three month. When exploring the data, we found that some host held more than 1 livestream per day. With further investigation, we found there were three scenarios: 1) Some hosts experienced technical issues so they had to end current session and start another session; 2) Some hosts ended the session for lunch/dinner break and restart a new one; 3) Some hosts first started a session without selling goods and then switched to a new session to sell. Therefore, we decided to group sessions that happened in the same day together and track daily performance. The following graph shows number of days they host a livestream from June to August. 
+
+### Total number of days steaming: KOLs host more streaming than celebrities
+```{r}
+#total number of days steaming: KOLs host more streaming than c
+ggplot(total_by_day, aes(fct_infreq(Name), fill=Host_category)) +
+geom_bar()+
+ggtitle("Number of Days with Livestream versus Host Name")+
+xlab("Host Name")+
+ylab("Number of Days with Livestream")+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+From the graph, we see that Liu Fang, Luo yonghao, and Liuyuanyuan almost held sessions every day.It is clear that KOLs are broadcasting more frequently than celebrities, which is reasonable since most KOLs were broadcasting for their own products (ex. Liu Fang and Liu Yuanyuan) and other KOLs usually signed contracts with companies and thus had a minimal number of days they need to broadcast. Celebrities, on the other hand, had other jobs to do so they didn't broadcasting as frequently. Luo Yonghao is an outlier in the celebrities group: he was first known by the public as an entrepreneur and actor but now he changed his focus to livestream sales. 
+
+### Relationship between days of livestream and revenue
+
+Now, let's look at the relationship between days of livestream and revenue. 
+
+```{r}
+#total sales vs days of streaming: KOLs generate more revenue, Luo is an outlier
+ggplot(total, aes(n, Sales_amount_total/1000000, color=Host_category)) +
+geom_point()+
+ggtitle("Total Sales in 3 Months versus Number of Days with Livestream")+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Total Sales in 3 Month (in millions CNY)")
+```
+
+The graph shows KOLs generated more revenues than celebrities overall. Again, Luo Yonghao is an outlier among these top 20 hosts with much more revenue generated. Actually, he is the most successful host in Douyin. Now, let's explore the revenue difference between the two groups further and look at the average revenue per day. 
+
+```{r}
+#avg sales vs days of streaming
+ggplot(total, aes(n, Sales_amount_avg/1000000, color=Host_category)) +
+geom_point()+
+ggtitle("Daily Average Sales versus Number of Days with Livestream")+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Daily Average Sales (in millions CNY)")
+```
+
+Here, we found another outlier Jia Nailiang, who has very large daily sales and only held a couple sessions. After some research, we found that he just started livesteam sales in mid-Aug and only had two days of broadcasting. Usually, when a celebrity just started to sell goods, he/she would get very good discounts from the business so the price were really attractive to consumers. Fans would also buy a lot to support them. Therefore, for our analysis, we will view Jia Nailiang as an outlier and we will keep track of his future performance and see if his data regression to the mean.  
+
+```{r}
+#after removing Jia: in general, celebrities hold less streaming and have more avg
+total%>%filter(Name!='Jia Nailiang') %>%
+ggplot(aes(n, Sales_amount_avg/1000000, color=Host_category)) +
+geom_point()+
+ggtitle("Daily Average Sales versus Number of Days with Livestream: After removing")+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)+
+xlab("Number of Days with Livestream")+
+ylab("Daily Average Sales (in millions CNY)")
+```
+
+After removing Jia Nailiang, it's easier to see most celebrities held less than 20 session in the 3 months but they were able to generate more daily revenues. Qi Wei,Lou Yixiao, Zhang Ting, and Zhu Zixiao are famous actresses and they had decent average sales. Another interesting insights we got from the graph is that KOLs were clustered as two groups: a group with large number of livestreams but lower average sales and the other group with fewer livestreams but more average sales. Just looking from the host name, we think it's probably a result of product mix. For example, Mr.Dong Jewely had most average sale among the 19 hosts; from his name, he was probably selling mostly jewely whose unit price is high and consumers don't buy that frequently. 
+
+### Overview of the product mix
+
+We will look more into the product mix in the next section.
+
+Seven categories of products are the following:
+
+```{r}
+#by categories
+sales <-read_csv("https://raw.githubusercontent.com/meganzhou62/tiktok_livesale/main/processed%20data/Data_Sales_processed2.csv")
+#sales
+#sum(is.na(sales))
+
+#factor relevel
+sales$Name<-as.factor(sales$Name)
+name_order<-fct_reorder(total$Name,-total$Sales_amount_total)%>%levels()
+sales$Name<-fct_relevel(sales$Name,name_order)
+#levels(sales$Name)
+
+
+sales$Good_category_new<-as.factor(sales$Good_category_new)
+sales_total<-sales %>% group_by(Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+good_order<-fct_reorder(sales_total$Good_category_new, -sales_total$Sales_amount_total)%>%levels()
+sales$Good_category_new<-fct_relevel(sales$Good_category_new,good_order)
+levels(sales$Good_category_new)
+
+#aggregate ccategory total
+sales2<-sales %>% group_by(Name,Host_category, Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+
+
+```
+
+```{r}
+#revenue by host, good category, not clear info
+ggplot(sales2, aes(Good_category_new, Sales_amount_total/1000000,fill = Host_category)) + 
+  geom_col() + 
+  facet_wrap(~Name, nrow=4)+
+  ggtitle("Sales by hosts and goods category")+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  theme(legend.position = "top")+
+  xlab("Goods Category")+
+  ylab("Total Sales (in millions CNY)")
+
+sales2%>%
+ggplot(aes( Good_category_new, Sales_amount_total/1000000, fill= Host_category)) +
+geom_col(position = "dodge")+
+scale_y_continuous(labels = scales::comma)+
+ggtitle("Sales by goods category")+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+xlab("Goods Category")+
+ylab("Total Sales (in millions CNY)")
+```
+
+The above graph gives an overview of the product mix for each host among 7 main categories ordered by total revenue. It can be seen that celebrities sold products across most categories and almost all of they sold most in beauty (again, Luo Yonghao is an outlier). KOLs, on the other hand, generated most revenue from 1-3 categories that they had a close relationship with. Let's zoom in and look at each group with details. 
+
+
+```{r}
+#K is generally good at 1 or 2 categories according to their expertise. 
+sales2%>%
+filter(Host_category=='K')%>%
+  ggplot(aes(Good_category_new, Sales_amount_total/1000000)) + 
+  geom_col(fill = 'red') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  ggtitle("Product mix for each KOL host among categories, ordered by total revenue")+
+  xlab("Goods Category")+
+  ylab("Total Sales (in millions CNY)")
+```
+
+From the graph, we can see Mr.Dong made most money from selling jewelries because he owned the jewerly shop. Zi An, Qiu Yingying and Lovemimius all made most sales in clothing and they also had their own online stores selling clothes. For four of them, they mainly promoted their own products. And viewers in their room should have the expectation about what they were watching and potentially buying Or in the other words, people who came to their rooms should already have a potential interest in the goods. Other KOLs are selling multiple categories of goods and a majority of them did become famous because of short videos and in that sense, they are more like online-celebrities. 
+
+```{r}
+#beauty is the most popular category in celebrities. Other categories is pretty even 
+sales2%>%
+filter(Host_category=='C')%>%
+  ggplot(aes(Good_category_new,Sales_amount_total/1000000)) + 
+  geom_col(fill = 'blue') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  ggtitle("Product mix for each celebrities host among categories, ordered by total revenue")+
+  xlab("Goods Category")+
+  ylab("Total Sales (in millions CNY)")
+```
+
+The product mix for celebrities are quite different. Besides Luo Yonghao, most celebrities sold all kinds of good with a higher percentage in beauty. This is not hard to understand after thinking through it. E-commerce is not the major income source for celebrities and they don't usually sign an exclusive agreement with any companies. Therefore, we usually sold whatever goods found by their assistance either with high commission or high discount (so they would attract more people and increase their population). The fact that celebrities didn't specialize in one category attracts = people with different interests and again diversified what they sell. Another interesting fact is that the most popular category among celebrities is beauty. We think it is due to two reasons. Firstly, beauty is the most popular e-commerce categories overall. Unlike clothes, people don't need to try on before buying, which makes it easier for e-commerce. Also, beauty products usually have more discounts online and their price elasticity is high (not necessities as household) so lowering the price would trigger more sales. On the other hand, celebrities usually have good-lookings. Therefore, they are more convincing when promoting a beauty product. 
+
+### Insights and findings
+
+Overall, it agrees with our hypothesis that consumers came to KOL because they have expertise in a specific category and came to celebrities because of their reputation.
+
+## Relationship between short video feedback and live streaming sales
+
+```{r cars}
+general_data <- read.csv(file = 'https://raw.githubusercontent.com/meganzhou62/tiktok_livesale/main/processed%20data/Data_Livestream_General_processed.csv')
+```
+
+```{r}
+#general_data
+```
+
+```{r}
+library(plyr)
+#change date
+general_data$Date <- as.Date(general_data$Start_time,format='%m/%d/%y')
+#group revenue by day, host
+general_data_aggbydate <-  ddply(general_data, .(Name, Date, Host_category), summarize,  dayrevenue=sum(Total_sales_amount))
+#general_data_aggbydate
+```
+
+```{r}
+
+video_data <- read.csv("https://raw.githubusercontent.com/meganzhou62/tiktok_livesale/main/assignmentand%20data/Data_Short_Videos.csv")
+#video_data
+```
+
+```{r}
+average_data_per_hosts <- ddply(video_data, .(Name), summarize,  like=mean(Number_of_likes, na.rm = TRUE), comments=mean(Number_of_comments, na.rm = TRUE), repost = mean(Number_of_reposts))
+#average_data_per_hosts
+```
+
+### Relationship between the number of like, comments, and repost of the videos and the daily revenues of live streams
+
+```{r}
+library(tidyr)
+library(plyr)
+general_data_average_re <-  ddply(general_data_aggbydate, .(Name,  Host_category), summarize,  dailyrevenue=mean(dayrevenue, na.rm = TRUE))
+#general_data_average_re
+```
+
+```{r}
+mergedData <- merge(general_data_average_re, average_data_per_hosts, by.x=c('Name'), by.y=c('Name'))
+#mergedData
+```
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+library(ggpubr)
+#my.formula <- y ~ x
+ggplot(data = mergedData, aes(x =like/1000000, y =  dailyrevenue/1000000, color = Host_category,label = Name)) +
+  xlab("like (in millions)")+
+  ylab("daily revenue(in millions CNY)")+
+  geom_point()+
+  #geom_text(aes(label=Ho),size = 2.5, hjust=1, vjust=0.5) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("like versus revenue")+
+  geom_smooth(method = "lm", se=FALSE, formula = 'y ~ x')+
+facet_grid(~ Host_category)
+ggplot(data = mergedData, aes(x =comments, y =  dailyrevenue/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  xlab("comments")+
+  ylab("daily revenue (in millions CNY)")+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE) +
+  ggtitle("comments versus revenue")+
+  geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')+
+facet_grid(~ Host_category)
+ggplot(data = mergedData, aes(x =repost, y =  dailyrevenue/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  xlab("reposts")+
+  ylab("daily revenue (in millions CNY)")+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = 8) +
+  ggtitle("repost versus revenue")+
+  geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')+
+facet_grid(~ Host_category)
+```
+
+If we have a look at the relationship between the number of like, comments, and repost of the videos posted by each host and the daily revenues of live streams conducted by different hosts, we find that there’s a positive correlation of average revenue to the average likes and comments received by each host’s video. However, this relationship exist only for the celebrities. For the KOL, there’s almost no correlation between their average daily revenue to the average likes and comments for their video. One thing that we also notice is that the average number of repost received by the videos is also uncorrelated to the number of revenue generated by each hosts, no matter these hosts are celebrities or KOL. This could be partly explained by the following image, where we created a scatter plot for the number of like, comments and reposts received by all of the video in our data. 
+
+```{r}
+pairs(video_data[,6:8]/1000)
+title(main = "Scatter plot for like, comments and reposts received by videols", xlab = "in thousands", ylab = "in thousands")
+```
+
+While the number of likes is highly correlated by the number of comments. The number of reposts appear to be not correlated with either comments or likes. Thus, we conclude while people exhibit the same pattern for liking or commenting a douyin video, they exhibit a different pattern for reposting a video, and this different pattern is less related to whether people would actually shop when the poster of these video conduct a live stream. 
+
+### Relationship of average number of likes and comments versus some other statistic of each session of live streams
+
+
+```{r}
+general_data_nonull <- na.omit(general_data) 
+more_average_data_per_hosts <- ddply(general_data_nonull, .(Name, Host_category), summarize,  peak=mean(Peak_viewers, na.rm = TRUE), gifts=mean(Gifts_from_viewers, na.rm = TRUE), revenue = mean(Total_sales_amount), viewer=mean(Views), average_viewers=mean(Average_number_of_online_viewers, na.rm = TRUE), likes_stream=mean(Number_of_likes, na.rm = TRUE), nf_stream=mean(Number_of_new_followers, na.rm = TRUE))
+#more_average_data_per_hosts
+```
+
+
+```{r}
+more_mergedData <- merge(more_average_data_per_hosts, average_data_per_hosts, by.x=c('Name'), by.y=c('Name'))
+#more_mergedData
+```
+
+```{r}
+pairs(more_mergedData[,3:12]/1000)
+title(main = "Scatter plot for avergae of likes and comments versus other statistics", xlab = "in thousands", ylab = "in thousands")
+```
+
+```{r}
+ggplot(data = more_mergedData, aes(x =like/1000000, y =  viewer/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 1, show.legend = FALSE, max.overlaps = 9) +
+  ggtitle("viewer versus like")+
+  xlab("like (in millions)")+
+  ylab("viewer (in millions)")+
+  geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')
+ggplot(data = more_mergedData, aes(x =comments, y =  viewer/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 0.5, show.legend = FALSE, max.overlaps = 9) +
+  ggtitle("viewer versus comments")+
+  ylab("viewer (in millions)")+
+  geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')
+ggplot(data = more_mergedData, aes(x =repost, y =  viewer/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  geom_text_repel(size = 2.5, nudge_y = 1, show.legend = FALSE, max.overlaps = 9) +
+  ggtitle("viewer versus repost")+
+  ylab("viewer (in millions)")+
+  geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')
+```
+
+To further investigate why the number of likes and comments are correlated to the daily revenue for celebrities. We explored the relationship of average number of likes and comments versus some other statistic of each session of live streams, including the number of viewers, the number of gifts received, the number of new fans, etc. Here we found that the average number of likes and comments of a host is also correlated to the number of viewers entering a live stream conducted by this host. Compared to the daily revenue, the average number of viewer is more strongly correlated to the number of likes and comments. We also notice that this relationship is much stronger for celebrities compared to KOL.
+
+### Insights and findings
+
+Thus, we conclude that whether they are a lot of people likes or comments on a hosts’ videos may direct influence the number of viewers of each live stream of the hosts, because people who like or comment on a host’s video would probably lead to people’s further action of going into the host’s live stream room and check out what the host is selling. However, for celebrities, this action of going into hosts’ room would more likely result in people actually buying stuff, while this is not the same for KOLs.
+
+
+```{r}
+ggplot(data = general_data, aes(x =Views/1000000, y =  Total_sales_amount/1000000, color = Host_category,label = Name)) +
+  geom_point()+
+  xlab("Views (in millions)")+
+  ylab("Total_sales_amount (in millions CNY)")+
+  #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
+  #geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  ggtitle("viewer versus re")+
+  geom_smooth(method="lm", se= FALSE)+
+  facet_wrap(~Host_category)
+```
+
+
+## When is the best time for a live streaming sale?
+
+```{r}
+data_live_gen_pro = read.csv('https://raw.githubusercontent.com/meganzhou62/tiktok_livesale/main/processed%20data/Data_Livestream_General_processed_2.csv')
+```
+
+```{r}
+Sys.setlocale("LC_TIME", "English")
+```
+
+When is the best time for a live streaming sale? This is a question that is worth pondering upon. 
+
+```{r}
+# data_live_gen_pro$Date <- gsub("200","",data_live_gen_pro$Date)
+# data_live_gen_pro$Start_time <- gsub("200","",data_live_gen_pro$Start_time)
+# data_live_gen_pro$Start_time <- mdy_hm(data_live_gen_pro$Start_time)
+# data_live_gen_pro$Duration = as.character(data_live_gen_pro$Duration)
+# data_live_gen_pro$Fan.Conversion.Ratio = as.character(data_live_gen_pro$Fan.Conversion.Ratio)
+# data_live_gen_pro$Sales_conversion_value_ratio = as.character(data_live_gen_pro$Sales_conversion_value_ratio)
+# data_live_gen_pro$Average_length_of_stay = as.character(data_live_gen_pro$Average_length_of_stay)
+# data_live_gen_pro$Name = as.character(data_live_gen_pro$Name)
+# data_live_gen_pro$Host_category = as.character(data_live_gen_pro$Host_category)
+# data_live_gen_pro$Occupation = as.character(data_live_gen_pro$Occupation)
+# data_clean <- data.frame()
+# for(name in unique(data_live_gen_pro$Name)){
+#   df <- subset(data_live_gen_pro,Name==name)
+#   for(date in unique(df$Date)){
+#     tmp <- subset(df,Date==date)
+#     if(nrow(tmp)==1){
+#       data_clean <- rbind(data_clean,tmp)
+#     }else{
+#       tmp$hour <- hour(tmp$Start_time)
+#       tmp_new <- tmp%>%
+#         group_by(hour)%>%
+#         summarise(Session_id = min(Session_id),
+#                               Start_time = min(Start_time),
+#                               Peak_viewers = sum(Peak_viewers),
+#                               Gifts_from_viewers = sum(Gifts_from_viewers),
+#                               Number_of_products = sum(Number_of_products),
+#                               Number_of_goods_sold = sum(Number_of_goods_sold),
+#                               Total_sales_amount = sum(Total_sales_amount),
+#                               Duration = max(Duration),
+#                               Views = sum(Views),
+#                               Average_number_of_online_viewers = sum(Average_number_of_online_viewers),
+#                               Number_of_likes = sum(Number_of_likes),
+#                               Number_of_new_followers = sum(Number_of_new_followers),
+#                               Fan.Conversion.Ratio = mean(as.numeric(Fan.Conversion.Ratio)),
+#                               Number_of_new_fans = sum(Number_of_new_fans),
+#                               Per_customer_transaction = sum(Per_customer_transaction),
+#                               UV = sum(UV),
+#                               Sales_conversion_value_ratio = mean(as.numeric(Sales_conversion_value_ratio)),
+#                               Average_length_of_stay = max(Average_length_of_stay),
+#                               Name = max(Name),
+#                               Host_category = max(Host_category),
+#                               Occupation = max(Occupation),
+#                               Date = max(Date),
+#                               Se = sum(Se),
+#                               New_LS = sum(New_LS)
+#                               )%>%
+#         select(-hour)
+#         data_clean <- rbind(data_clean,tmp_new)
+#     }
+#   }
+# }
+```
+
+
+### Difference between Weekdays and weenkends
+
+Do people tend to buy more on weekdays, on weekends, or there is no difference?
+
+```{r}
+# data_clean <- subset(data_clean,Se/60>=5)
+# data_clean$weekday <- weekdays(as.POSIXct(data_clean$Start_time), abbreviate = T)
+# data_clean$re <- data_clean$Total_sales_amount
+# data_clean$weekday <-factor(data_clean$weekday,levels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"))
+# data_clean$weekends <- ifelse(data_clean$weekday%in%c("Sat","Sun"),"Weekends","Weekdays")
+# ggplot(data_clean,aes(weekday,re/1000000))+
+#   geom_violin(fill="steelblue",scale="count")+
+#   stat_summary(re =mean, geom="point", size=2, color="red")+
+#   theme_bw()+
+#   labs(y="Total Sales Amount (Millions CNY)")
+
+```
+
+###![one](one.png)One#####
+
+To gain insights on the relationship of purchasing power to the day of the week, we visualize the total sales amount (Revenue) by each day in the week through a violin plot. To make sure that only the valid live streaming counts in our analysis, we will only include those live streaming last longer than 5 minutes so that the NA values can be eliminated. The plot tells us not only the mean, which is denoted by the red dot but also the distribution of the total sales amount for each day’s live streaming. For all 7 days, most of the sales are clustered in the bottom, while a small number of large values are pulling the mean up. 
+
+As this plot shows, the difference of the seven days in a week in terms of their distribution is not very obvious, as their distribution is similar. But we can still see that Thursday and Monday appear to have lower means compared to the other 5 days. This observation logically makes sense and might be related to consumer behavior in a week, as these two days are the most stressful during a workweek respectively. In general, people like to think of weekends as a time of rest and rejuvenation, and therefore people’s moods are typically at their lowest on Mondays and focus on the transition from relaxation to the new work or school week, which causes them to spend less time and money in watching live streaming. On the other hand, Thursday is the day right before Friday, the end of the work or school week, “the end of the week” feeling pushes people to be stressed and to focus more on their work or study, which might reduce their chance to watch live streaming and accordingly decrease the sales amount. Therefore, in general, selling on Monday and Thursday might be more challenging to generate higher revenue.
+
+```{r}
+# ggplot(data_clean,aes(weekends,re/1000000))+
+#   geom_violin(fill="steelblue",scale = "width")+
+#   theme_bw()+
+#   stat_summary(re =mean, geom="point", size=2, color="red")+
+#   labs(y="Total Sales Amount (Millions CNY)")
+```
+
+###![two](two.png)two#####
+
+The distribution of sales by the two groups of weekdays and weekends reveals that live streaming sales on weekends are more likely to generate a higher sales amount than those on weekdays. Live streaming sales on weekends also have a higher mean than those on weekdays. These observations suggest that selling on weekends is more likely to increase sales amount, which is in line with our intuition.
+
+
+
+### Starting time
+
+Does the start time of live streaming affect the sales amount?
+
+```{r,message=FALSE,warning=FALSE}
+# data_clean$hour <- hour(data_clean$Start_time)
+# hour_avg <- aggregate(re~hour,data_clean,mean)
+# ggplot(hour_avg,aes(hour,re/1000000,group=1))+
+#   geom_line()+
+#   geom_point(col="red")+
+#   theme_bw()+
+#   labs(x="Starting Time (Hour)",y="Average Total Sales Amount by Hour (Millions CNY)")
+```
+
+We plot the average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, and find those live-streaming started at 10 AM tends to generate a much higher average total sales amount. Those live streaming started at 10 AM appear to be able to achieve an average total sales amount more than 2 times higher than those live-streaming started in the afternoon. This observation suggests that live streaming starting around 10 AM might be the best choice to improve the average total sales amount.
+
+###![three](three.png)#####
+
+Does the start time of live streaming be related to duration?
+
+```{r,message=FALSE,warning=FALSE}
+# ggplot(data_clean,aes(hour,Se/3600))+
+#   geom_point()+
+#   theme_bw()+
+#    geom_smooth(se=F)+
+#   labs(x="Starting Time (Hour)",y="Duration (hour)")
+```
+
+###![four](four.png)#####
+
+
+We plot the duration of live streaming to the starting time, and we find those live streaming started around 10 AM tends to have a longer live streaming duration. The smooth curve also indicates the same information that the live streaming started around 10 AM has the peaked duration, and after 10 AM, the duration decreases by time. In addition, the smooth curve shows a similar pattern as the plot of average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, which indicates live streaming duration is positively related to the average total sales amounts in each hour.
+
+```{r,message=FALSE,warning=FALSE}
+# ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
+#   geom_point(col="steelblue")+
+#   geom_smooth(method = "lm",se=F,col="black")+
+#   theme_bw()+
+#    labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
+```
+
+###![five](five.png)#####
+
+This plot reaffirms that live streaming duration is positively related to the average total sales amounts in each hour.
+
+
+```{r}
+# ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
+#   geom_point()+
+#   geom_smooth(method = "lm",se=F)+
+#   facet_wrap(~Host_category)+
+#   theme_bw()+
+#   labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
+```
+
+
+###![six](six.png)#####
+
+Then we analyze the plot of average Sale Amount by hours to duration facet by whether the host is a KOL or not. As the plot shows, the slope of KOL is much steeper, which indicates that the positive relationship between the average total sales amounts in each hour and duration appears to be more significant for KOLs than the non-KOLs.
+
+
+### The relationship between average stay length and sales amount
+```{r,message=FALSE,warning=FALSE}
+# ggplot(data_clean,aes(New_LS,re/1000000))+
+#   geom_point(col="steelblue")+
+#   geom_vline(xintercept = 2.5,lwd=0.8)+
+#   geom_smooth(se=F,col="red")+
+#   facet_wrap(~Host_category)+
+#   theme_bw()+
+#   labs(x="Stay time (min)",y="Total Sales Amount (Millions CNY)")
+```
+
+###![seven](seven.png)#####
+
+When analyzing a viewer’s average stay length in a host’s live streaming, we find an average stay time of 2.5 minutes appear to be the best choice, at which the total sales amount tends to be the highest, no matter the host is a KOL or not. Also, the stay time of KOL’s streaming room scattered more dispersed than that of non-KOLs, ranging from 1 to 8 minutes. On the other hand, the data points of non-KOLs are more clustered, and most of them are less than 3 minutes.
+
+### Insights and findings
+
+Based on the observations above, we can sum up that no matter the host is a KOL or not, an average stay time of 2.5 minutes in the live streaming room appears to be the best choice to boost the sales amount. Also, live streaming started around 10 AM tends to have a longer live streaming duration, and they also tend to generate a higher average total sales amounts than those started at other hours. In addition, selling on weekends is more likely to increase sales amount, whereas Monday and Thursday might be less favorable choices.
+
+

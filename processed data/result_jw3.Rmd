@@ -5,12 +5,15 @@ output:
   pdf_document: default
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(ggrepel)
 ```
+
+### KOL vs Celebrities
 
 From 2021/06 to 2021/08, among top20 hosts, KOL generated more revenue than celebrities.
 Do celebrities have an advantage over KOLs (key opinion leader)? In particular, what’s the revenue comparison between the two groups? 
