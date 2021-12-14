@@ -1,0 +1,157 @@
+---
+title: "results"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Do celebrities have an advantage over KOLs (key opinion leader)? In particular, what’s the revenue comparison between the two groups? We have a hypothesis that people come to celebrities’ live streaming rooms because they like the person and come to KOLs’ live streaming rooms because KOLs offer a higher discount or have expertise in the specific area. 
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+
+livestream <- read_csv("../processed data/Data_Livestream_General_processed.csv")
+livestream
+
+#change date
+livestream$Date <- as.Date(livestream$Date,format='%m/%d/%y')
+livestream$Host_category<-as.factor(livestream$Host_category)
+
+
+#group revenue by day, host
+total_by_day<-livestream %>% group_by(Name, Host_category, Date) %>%
+  dplyr::summarize(Sales_amount_total = sum(Total_sales_amount,na.rm=TRUE),n=n()) %>%
+  ungroup()
+
+average<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_avg = mean(Sales_amount_total,na.rm=TRUE))  
+  
+total<-total_by_day %>% group_by(Name, Host_category) %>%
+  dplyr::summarize(Sales_amount_total = sum(Sales_amount_total,na.rm=TRUE),n=n()) %>%
+  left_join(average, by=c("Name", "Host_category"))
+```
+
+```{r}
+#sales distribution: KOLs host more streaming than c; KOLs sell more than c
+ggplot(total_by_day, aes(Sales_amount_total)) +
+geom_histogram()+ 
+facet_wrap(~Host_category)+
+scale_x_continuous(labels = scales::comma)
+
+#total number of days steaming: KOLs host more streaming than c
+ggplot(total_by_day, aes(fct_infreq(Name), fill=Host_category)) +
+geom_bar()+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+#total sales vs days of streaming: KOLs generate more revenue, Luo is an outlier
+ggplot(total, aes(n, Sales_amount_total, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)
+
+#avg sales vs days of streaming
+ggplot(total, aes(n, Sales_amount_avg, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)
+#jia nailiang just starts in mid-aug and only has two days of livestreaming. outlier
+
+#after removing Jia: in general, celebrities hold less streaming and have more avg
+total%>%filter(Name!='Jia Nailiang') %>%
+ggplot(aes(n, Sales_amount_avg, color=Host_category)) +
+geom_point()+
+geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
+scale_y_continuous(labels = scales::comma)
+
+```
+
+
+```{r}
+#by categories
+sales <-read_csv("../processed data/Data_Sales_processed2.csv")
+sales
+sum(is.na(sales))
+
+#factor relevel
+sales$Name<-as.factor(sales$Name)
+name_order<-fct_reorder(total$Name,-total$Sales_amount_total)%>%levels()
+sales$Name<-fct_relevel(sales$Name,name_order)
+levels(sales$Name)
+
+
+sales$Good_category_new<-as.factor(sales$Good_category_new)
+sales_total<-sales %>% group_by(Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+good_order<-fct_reorder(sales_total$Good_category_new, -sales_total$Sales_amount_total)%>%levels()
+sales$Good_category_new<-fct_relevel(sales$Good_category_new,good_order)
+levels(sales$Good_category_new)
+
+#aggregate ccategory total
+sales2<-sales %>% group_by(Name,Host_category, Good_category_new) %>%
+  summarize(Sales_volume_total = sum(Sales_volume), Sales_amount_total = sum(Sales_amount))
+
+
+```
+
+```{r}
+#EDAV, not use
+sales2%>%
+ggplot(aes( Good_category_new,Name, fill=Sales_amount_total)) +
+geom_tile()
+
+#not use
+ggplot(sales2, aes(x = Good_category_new, y = Sales_amount_total, color = Name)) +
+  geom_point(size = 5, alpha = .5) +
+  coord_flip() +
+  facet_wrap(~Host_category, ncol = 1) 
+ # scale_color_manual(values = icecreamcolors) +
+  #theme_dotplot
+
+#revenue by host, good category, not clear info
+ggplot(sales2, aes(Sales_amount_total, Good_category_new,fill = Host_category)) + 
+  geom_col() + 
+  facet_wrap(~Name, nrow=4)+
+  scale_x_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  theme(legend.position = "top")
+```
+
+```{r}
+sales2%>%
+ggplot(aes( Good_category_new, Sales_amount_total, fill= Host_category)) +
+geom_col(position = "dodge")+
+scale_y_continuous(labels = scales::comma)+
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+#K is generally good at 1 or 2 categories according to their expertise. 
+sales2%>%
+filter(Host_category=='K')%>%
+  ggplot(aes(Good_category_new, Sales_amount_total)) + 
+  geom_col(fill = 'red') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+#beauty is the most popular category in celebraies. Other categories is pretty even 
+sales2%>%
+filter(Host_category=='C')%>%
+  ggplot(aes(Good_category_new,Sales_amount_total)) + 
+  geom_col(fill = 'blue') + 
+  facet_wrap(~Name, nrow=2)+
+  scale_y_continuous(labels = scales::comma)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+```
+From 2021/06 to 2021/08, among top20 hosts, KOL generated more revenue than celebrities.
+
+
+Do celebrities have an advantage over KOLs (key opinion leader)? In particular, what’s the revenue comparison between the two groups? 
+We have a hypothesis that people come to celebrities’ live streaming rooms because they like the person and come to KOLs’ live streaming rooms because KOLs offer a higher discount or have expertise in the specific area. 
+We will focus on the top 20 hosts’ sales data in the past quarter to answer the questions. We will first define people to be celebrities if they are famous actors/actresses/singers based on our common judgments. Then we will look at their sales data and test our hypothesis.
+look at sales in different cateogry
+
