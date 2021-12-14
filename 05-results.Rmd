@@ -44,6 +44,7 @@ total<-total_by_day %>% group_by(Name, Host_category) %>%
 #sales distribution: KOLs host more streaming than c; KOLs sell more than c
 ggplot(total_by_day, aes(Sales_amount_total/1000000)) +
 geom_histogram()+ 
+ggtitle("Counts versus Sale Revenue per Day")+
 facet_wrap(~Host_category)+
 xlab("Sale Revenue per Day (in millions CNY)")+
 scale_x_continuous(labels = scales::comma)
@@ -58,6 +59,7 @@ We can also see from the graph that KOLs held more livestream than celebrities w
 #total number of days steaming: KOLs host more streaming than c
 ggplot(total_by_day, aes(fct_infreq(Name), fill=Host_category)) +
 geom_bar()+
+ggtitle("Number of Days with Livestream versus Host Name")+
 xlab("Host Name")+
 ylab("Number of Days with Livestream")+
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -73,6 +75,7 @@ Now, let's look at the relationship between days of livestream and revenue.
 #total sales vs days of streaming: KOLs generate more revenue, Luo is an outlier
 ggplot(total, aes(n, Sales_amount_total/1000000, color=Host_category)) +
 geom_point()+
+ggtitle("Total Sales in 3 Months versus Number of Days with Livestream")+
 geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
 scale_y_continuous(labels = scales::comma)+
 xlab("Number of Days with Livestream")+
@@ -85,6 +88,7 @@ The graph shows KOLs generated more revenues than celebrities overall. Again, Lu
 #avg sales vs days of streaming
 ggplot(total, aes(n, Sales_amount_avg/1000000, color=Host_category)) +
 geom_point()+
+ggtitle("Daily Average Sales versus Number of Days with Livestream")+
 geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
 scale_y_continuous(labels = scales::comma)+
 xlab("Number of Days with Livestream")+
@@ -98,6 +102,7 @@ Here, we found another outlier Jia Nailiang, who has very large daily sales and 
 total%>%filter(Name!='Jia Nailiang') %>%
 ggplot(aes(n, Sales_amount_avg/1000000, color=Host_category)) +
 geom_point()+
+ggtitle("Daily Average Sales versus Number of Days with Livestream: After removing")+
 geom_label_repel(aes(label = Name), size = 2, min.segment.length = 0, max.overlaps = 9, show.legend=FALSE)+
 scale_y_continuous(labels = scales::comma)+
 xlab("Number of Days with Livestream")+
@@ -144,6 +149,7 @@ sales2<-sales %>% group_by(Name,Host_category, Good_category_new) %>%
 ggplot(sales2, aes(Good_category_new, Sales_amount_total/1000000,fill = Host_category)) + 
   geom_col() + 
   facet_wrap(~Name, nrow=4)+
+  ggtitle("Sales by hosts and goods category")+
   scale_y_continuous(labels = scales::comma)+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
   theme(legend.position = "top")+
@@ -154,6 +160,7 @@ sales2%>%
 ggplot(aes( Good_category_new, Sales_amount_total/1000000, fill= Host_category)) +
 geom_col(position = "dodge")+
 scale_y_continuous(labels = scales::comma)+
+ggtitle("Sales by goods category")+
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
 xlab("Goods Category")+
 ylab("Total Sales (in millions CNY)")
@@ -171,6 +178,7 @@ filter(Host_category=='K')%>%
   facet_wrap(~Name, nrow=2)+
   scale_y_continuous(labels = scales::comma)+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  ggtitle("Product mix for each KOL host among categories, ordered by total revenue")+
   xlab("Goods Category")+
   ylab("Total Sales (in millions CNY)")
 ```
@@ -186,6 +194,7 @@ filter(Host_category=='C')%>%
   facet_wrap(~Name, nrow=2)+
   scale_y_continuous(labels = scales::comma)+
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  ggtitle("Product mix for each celebrities host among categories, ordered by total revenue")+
   xlab("Goods Category")+
   ylab("Total Sales (in millions CNY)")
 ```
@@ -268,7 +277,7 @@ ggplot(data = mergedData, aes(x =repost, y =  dailyrevenue/1000000, color = Host
   xlab("reposts")+
   ylab("daily revenue (in millions CNY)")+
   #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
-  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = 8) +
   ggtitle("repost versus revenue")+
   geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')+
 facet_grid(~ Host_category)
@@ -277,7 +286,8 @@ facet_grid(~ Host_category)
 If we have a look at the relationship between the number of like, comments, and repost of the videos posted by each host and the daily revenues of live streams conducted by different hosts, we find that there’s a positive correlation of average revenue to the average likes and comments received by each host’s video. However, this relationship exist only for the celebrities. For the KOL, there’s almost no correlation between their average daily revenue to the average likes and comments for their video. One thing that we also notice is that the average number of repost received by the videos is also uncorrelated to the number of revenue generated by each hosts, no matter these hosts are celebrities or KOL. This could be partly explained by the following image, where we created a scatter plot for the number of like, comments and reposts received by all of the video in our data. 
 
 ```{r}
-pairs(video_data[,6:8])
+pairs(video_data[,6:8]/1000)
+title(main = "Scatter plot for like, comments and reposts received by videols", xlab = "in thousands", ylab = "in thousands")
 ```
 
 While the number of likes is highly correlated by the number of comments. The number of reposts appear to be not correlated with either comments or likes. Thus, we conclude while people exhibit the same pattern for liking or commenting a douyin video, they exhibit a different pattern for reposting a video, and this different pattern is less related to whether people would actually shop when the poster of these video conduct a live stream. 
@@ -298,14 +308,15 @@ more_mergedData <- merge(more_average_data_per_hosts, average_data_per_hosts, by
 ```
 
 ```{r}
-pairs(more_mergedData[,3:12])
+pairs(more_mergedData[,3:12]/1000)
+title(main = "Scatter plot for avergae of likes and comments versus other statistics", xlab = "in thousands", ylab = "in thousands")
 ```
 
 ```{r}
 ggplot(data = more_mergedData, aes(x =like/1000000, y =  viewer/1000000, color = Host_category,label = Name)) +
   geom_point()+
   #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
-  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  geom_text_repel(size = 2.5, nudge_y = 1, show.legend = FALSE, max.overlaps = 9) +
   ggtitle("viewer versus like")+
   xlab("like (in millions)")+
   ylab("viewer (in millions)")+
@@ -313,14 +324,14 @@ ggplot(data = more_mergedData, aes(x =like/1000000, y =  viewer/1000000, color =
 ggplot(data = more_mergedData, aes(x =comments, y =  viewer/1000000, color = Host_category,label = Name)) +
   geom_point()+
   #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
-  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  geom_text_repel(size = 2.5, nudge_y = 0.5, show.legend = FALSE, max.overlaps = 9) +
   ggtitle("viewer versus comments")+
   ylab("viewer (in millions)")+
   geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')
 ggplot(data = more_mergedData, aes(x =repost, y =  viewer/1000000, color = Host_category,label = Name)) +
   geom_point()+
   #geom_text(aes(label=Ho),hjust=1, vjust=0) + 
-  geom_text_repel(size = 2.5, nudge_y = 10, show.legend = FALSE, max.overlaps = Inf) +
+  geom_text_repel(size = 2.5, nudge_y = 1, show.legend = FALSE, max.overlaps = 9) +
   ggtitle("viewer versus repost")+
   ylab("viewer (in millions)")+
   geom_smooth(method="lm", se= FALSE, formula = 'y ~ x')
@@ -431,8 +442,7 @@ Do people tend to buy more on weekdays, on weekends, or there is no difference?
 
 ```
 
-![week1](“https://github.com/meganzhou62/tiktok_livesale/blob/main/docs/week1.png?raw=true”)
-
+###![one](one.png)One#####
 
 To gain insights on the relationship of purchasing power to the day of the week, we visualize the total sales amount (Revenue) by each day in the week through a violin plot. To make sure that only the valid live streaming counts in our analysis, we will only include those live streaming last longer than 5 minutes so that the NA values can be eliminated. The plot tells us not only the mean, which is denoted by the red dot but also the distribution of the total sales amount for each day’s live streaming. For all 7 days, most of the sales are clustered in the bottom, while a small number of large values are pulling the mean up. 
 
@@ -446,11 +456,16 @@ As this plot shows, the difference of the seven days in a week in terms of their
 #   labs(y="Total Sales Amount (Millions CNY)")
 ```
 
+###![two](two.png)two#####
+
 The distribution of sales by the two groups of weekdays and weekends reveals that live streaming sales on weekends are more likely to generate a higher sales amount than those on weekdays. Live streaming sales on weekends also have a higher mean than those on weekdays. These observations suggest that selling on weekends is more likely to increase sales amount, which is in line with our intuition.
+
+
+
+### Starting time
 
 Does the start time of live streaming affect the sales amount?
 
-### time
 ```{r,message=FALSE,warning=FALSE}
 # data_clean$hour <- hour(data_clean$Start_time)
 # hour_avg <- aggregate(re~hour,data_clean,mean)
@@ -463,6 +478,7 @@ Does the start time of live streaming affect the sales amount?
 
 We plot the average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, and find those live-streaming started at 10 AM tends to generate a much higher average total sales amount. Those live streaming started at 10 AM appear to be able to achieve an average total sales amount more than 2 times higher than those live-streaming started in the afternoon. This observation suggests that live streaming starting around 10 AM might be the best choice to improve the average total sales amount.
 
+###![three](three.png)#####
 
 Does the start time of live streaming be related to duration?
 
@@ -474,6 +490,9 @@ Does the start time of live streaming be related to duration?
 #   labs(x="Starting Time (Hour)",y="Duration (hour)")
 ```
 
+###![four](four.png)#####
+
+
 We plot the duration of live streaming to the starting time, and we find those live streaming started around 10 AM tends to have a longer live streaming duration. The smooth curve also indicates the same information that the live streaming started around 10 AM has the peaked duration, and after 10 AM, the duration decreases by time. In addition, the smooth curve shows a similar pattern as the plot of average total sales amounts in each hour (in millions of CNY) to the start of the time of live streaming, which indicates live streaming duration is positively related to the average total sales amounts in each hour.
 
 ```{r,message=FALSE,warning=FALSE}
@@ -484,7 +503,10 @@ We plot the duration of live streaming to the starting time, and we find those l
 #    labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
 ```
 
+###![five](five.png)#####
+
 This plot reaffirms that live streaming duration is positively related to the average total sales amounts in each hour.
+
 
 ```{r}
 # ggplot(data_clean,aes(Se/3600,re/(Se/3600)/1000000))+
@@ -495,10 +517,13 @@ This plot reaffirms that live streaming duration is positively related to the av
 #   labs(x="Duration (hour)",y="Average Sale Amount by hour (Millions CNY)")
 ```
 
+
+###![six](six.png)#####
+
 Then we analyze the plot of average Sale Amount by hours to duration facet by whether the host is a KOL or not. As the plot shows, the slope of KOL is much steeper, which indicates that the positive relationship between the average total sales amounts in each hour and duration appears to be more significant for KOLs than the non-KOLs.
 
 
-### 停留时长与re的关系
+### The relationship between average stay length and sales amount
 ```{r,message=FALSE,warning=FALSE}
 # ggplot(data_clean,aes(New_LS,re/1000000))+
 #   geom_point(col="steelblue")+
@@ -509,7 +534,12 @@ Then we analyze the plot of average Sale Amount by hours to duration facet by wh
 #   labs(x="Stay time (min)",y="Total Sales Amount (Millions CNY)")
 ```
 
+###![seven](seven.png)#####
+
 When analyzing a viewer’s average stay length in a host’s live streaming, we find an average stay time of 2.5 minutes appear to be the best choice, at which the total sales amount tends to be the highest, no matter the host is a KOL or not. Also, the stay time of KOL’s streaming room scattered more dispersed than that of non-KOLs, ranging from 1 to 8 minutes. On the other hand, the data points of non-KOLs are more clustered, and most of them are less than 3 minutes.
 
+### Insights and findings
+
+Based on the observations above, we can sum up that no matter the host is a KOL or not, an average stay time of 2.5 minutes in the live streaming room appears to be the best choice to boost the sales amount. Also, live streaming started around 10 AM tends to have a longer live streaming duration, and they also tend to generate a higher average total sales amounts than those started at other hours. In addition, selling on weekends is more likely to increase sales amount, whereas Monday and Thursday might be less favorable choices.
 
 
