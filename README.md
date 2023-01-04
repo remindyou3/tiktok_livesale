@@ -9,7 +9,7 @@ Our final conclusion includes:
 - When a lot of people like or comment on a hosts’ videos, the live stream of that hosts are more likely to become popular and generate more revenues. This effect is more obvious in the celebrity group.
 - The timing of the livestream, as long as the average duration of customers viewing the livestream does influence the sells. 
 
-To view the full content of the project, including how we got our data and our process of transforming the data, and the steps and result of our analysis, you're welcome to copy and paste the book URL (meganzhou62.github.io/tiktok_livesale/) to view it in your browser.
+To view the full report of the project, including how we got our data and our process of transforming the data, and the steps and result of our analysis, you're welcome to copy and paste the book URL (meganzhou62.github.io/tiktok_livesale/) to view it in your browser. It also has some interative component in Chapter 6. I highly recommend checking it out. 
 
-The technology in this project include R and Javascript (D3). Thanks to our instructor, this repo was initially generated from a bookdown template: https://github.com/jtr13/EDAVtemplate.
+The technology in this project include R and Javascript (D3). Thanks to our instructor, the report was initially generated from a bookdown template: https://github.com/jtr13/EDAVtemplate.
 
